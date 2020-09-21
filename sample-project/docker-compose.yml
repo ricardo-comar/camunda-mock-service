@@ -1,0 +1,57 @@
+version: '3'
+
+networks:
+  webnet:
+    driver: bridge
+
+services:
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    network_mode: host
+    ports:
+      - 8081:8080
+      - 50000:50000
+    container_name: jenkins
+    volumes:
+      - ./target/jenkins/home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/local/bin/docker:/usr/local/bin/docker
+
+  database:
+    image: "postgres" # use latest official postgres version
+    ports:
+     - "5432:5432"
+    networks:
+     - webnet
+    environment:
+      - POSTGRES_USER=camunda
+      - POSTGRES_PASSWORD=camunda
+      - POSTGRES_DB=process-engine
+    volumes:
+      - ./target/database/:/var/lib/postgresql/data/
+     
+  camunda:
+    image: camunda/camunda-bpm-platform:7.11.0
+    restart: on-failure
+    ports:
+     - "80:8080"
+    networks:
+     - webnet
+    depends_on:
+     - "database"
+    environment:
+      - DB_DRIVER=org.postgresql.Driver
+      - DB_URL=jdbc:postgresql://database:5432/process-engine
+      - DB_USERNAME=camunda
+      - DB_PASSWORD=camunda
+      - WAIT_FOR=database:5432
+#      - DB_DRIVER=com.mysql.jdbc.Driver
+#      - DB_URL=jdbc:mysql://mysql:3306/camunda_db?autoReconnect=true
+#      - DB_USERNAME=root
+#      - DB_PASSWORD=testpwd
+#      - WAIT_FOR=mysql:3306
+    links:
+      - database
