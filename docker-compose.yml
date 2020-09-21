@@ -1,0 +1,191 @@
+version: '3'
+
+networks:
+  webnet:
+    driver: bridge
+
+services:
+
+
+  splunkenterprise:
+    hostname: splunkenterprise
+    image: splunk/splunk:7.0.3
+    networks:
+      - webnet
+    environment:
+      SPLUNK_START_ARGS: --accept-license --answer-yes
+      SPLUNK_ENABLE_LISTEN: 9997
+      SPLUNK_ADD: tcp 1514
+    volumes:
+      - ./target/splunk/etc:/opt/splunk/etc
+      - ./target/splunk/var:/opt/splunk/var
+    ports:
+      - "8000:8000"
+      - "9997:9997"
+      - "8088:8088"
+      - "1514:1514"
+
+  database:
+    image: "postgres" # use latest official postgres version
+    ports:
+     - "5432:5432"
+    networks:
+     - webnet
+    environment:
+      - POSTGRES_USER=camunda
+      - POSTGRES_PASSWORD=camunda
+      - POSTGRES_DB=process-engine
+    volumes:
+      - ./target/database/:/var/lib/postgresql/data/
+     
+  camunda:
+    image: camunda/camunda-bpm-platform:7.11.0
+    restart: on-failure
+    ports:
+     - "80:8080"
+    networks:
+     - webnet
+    depends_on:
+     - "database"
+    environment:
+      - DB_DRIVER=org.postgresql.Driver
+      - DB_URL=jdbc:postgresql://database:5432/process-engine
+      - DB_USERNAME=camunda
+      - DB_PASSWORD=camunda
+      - WAIT_FOR=database:5432
+#      - DB_DRIVER=com.mysql.jdbc.Driver
+#      - DB_URL=jdbc:mysql://mysql:3306/camunda_db?autoReconnect=true
+#      - DB_USERNAME=root
+#      - DB_PASSWORD=testpwd
+#      - WAIT_FOR=mysql:3306
+    links:
+      - database
+
+#   zookeeper-1:
+#     image: confluentinc/cp-zookeeper:latest
+#     hostname: zookeeper-1
+#     ports:
+#       - "12181:12181"
+#     volumes:
+#       - ./target/zoo1/data:/data
+#       - ./target/zoo1/datalog:/datalog
+#     environment:
+#       ZOOKEEPER_SERVER_ID: 1
+#       ZOOKEEPER_CLIENT_PORT: 12181
+#       ZOOKEEPER_TICK_TIME: 2000
+#       ZOOKEEPER_INIT_LIMIT: 5
+#       ZOOKEEPER_SYNC_LIMIT: 2
+#       ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+#   zookeeper-2:
+#     image: confluentinc/cp-zookeeper:latest
+#     hostname: zookeeper-2
+#     ports:
+#       - "22181:22181"
+#     volumes:
+#       - ./target/zoo2/data:/data
+#       - ./target/zoo2/datalog:/datalog
+#     environment:
+#       ZOOKEEPER_SERVER_ID: 2
+#       ZOOKEEPER_CLIENT_PORT: 22181
+#       ZOOKEEPER_TICK_TIME: 2000
+#       ZOOKEEPER_INIT_LIMIT: 5
+#       ZOOKEEPER_SYNC_LIMIT: 2
+#       ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+#   zookeeper-3:
+#     image: confluentinc/cp-zookeeper:latest
+#     hostname: zookeeper-3
+#     ports:
+#       - "32181:32181"
+#     volumes:
+#       - ./target/zoo3/data:/data
+#       - ./target/zoo3/datalog:/datalog
+#     environment:
+#       ZOOKEEPER_SERVER_ID: 3
+#       ZOOKEEPER_CLIENT_PORT: 32181
+#       ZOOKEEPER_TICK_TIME: 2000
+#       ZOOKEEPER_INIT_LIMIT: 5
+#       ZOOKEEPER_SYNC_LIMIT: 2
+#       ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+#   kafka-1:
+#     image: confluentinc/cp-kafka:5.3.0
+#     hostname: kafka-1
+#     ports:
+#       - "19092:19092"
+#     depends_on:
+#       - zookeeper-1
+#       - zookeeper-2
+#       - zookeeper-3
+#     volumes:
+#       - ./target/kafka1/data:/var/lib/kafka/data
+#     environment:
+#       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-1:19093,LISTENER_DOCKER_EXTERNAL://127.0.0.1:19092
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:22181,zookeeper-3:32181
+#       KAFKA_BROKER_ID: 1
+#       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+
+#   kafka-2:
+#     image: confluentinc/cp-kafka:5.3.0
+#     hostname: kafka-2
+#     ports:
+#       - "29092:29092"
+#     depends_on:
+#       - zookeeper-1
+#       - zookeeper-2
+#       - zookeeper-3
+#     volumes:
+#       - ./target/kafka2/data:/var/lib/kafka/data
+#     environment:
+#       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-2:29093,LISTENER_DOCKER_EXTERNAL://127.0.0.1:29092
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:22181,zookeeper-3:32181
+#       KAFKA_BROKER_ID: 2
+#       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#   kafka-3:
+#     image: confluentinc/cp-kafka:5.3.0
+#     hostname: kafka-3
+#     ports:
+#       - "39092:39092"
+#     depends_on:
+#       - zookeeper-1
+#       - zookeeper-2
+#       - zookeeper-3
+#     volumes:
+#       - ./target/kafka3/data:/var/lib/kafka/data
+#     environment:
+#       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-3:39093,LISTENER_DOCKER_EXTERNAL://127.0.0.1:39092
+#   #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:39092
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:22181,zookeeper-3:32181
+#       KAFKA_BROKER_ID: 3
+#       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#   kafka-schema-registry:
+#     image: confluentinc/cp-schema-registry:5.3.0
+#     hostname: kafka-schema-registry
+#     ports:
+#       - "8081:8081"
+#     environment:
+#       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-3:39093
+#   #      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: localhost:12181
+#       SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
+#       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+#     depends_on:
+#       - zookeeper-1
+#       - zookeeper-2
+#       - zookeeper-3
+#       - kafka-1
+#       - kafka-2
+#       - kafka-3
+  
