@@ -21,17 +21,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(uniqueConstraints={
-    @UniqueConstraint(columnNames = {"topicName", "scenarioId"})
+    @UniqueConstraint(columnNames = {"topicName", "priority"})
 }) 
 public class ScenarioEntity {
 
     @Id
     private String scenarioId;
 
+    @Column(nullable = false)
     private String topicName;
 
     @Column(nullable = false)
-    private Long order;
+    private Long priority;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ConditionEntity condition;    

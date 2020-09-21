@@ -12,7 +12,7 @@ public class ScenarioRequestFixture implements TemplateLoader {
             {
                 add("topicName", "mockTopic");
                 add("condition", one(ConditionRequest.class, "valid"));
-                add("order", 1L);
+                add("priority", 1L);
                 add("variables",
                         has(4).of(VariableRequest.class, "boolean", "string", "long", "script"));
             }

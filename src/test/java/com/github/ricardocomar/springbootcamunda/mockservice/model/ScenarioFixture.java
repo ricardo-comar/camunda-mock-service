@@ -12,9 +12,39 @@ public class ScenarioFixture implements TemplateLoader {
             {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
-                add("order", 1L);
+                add("priority", 1L);
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(4).of(Variable.class, "boolean", "string", "long", "script"));
+            }
+        });
+
+        Fixture.of(Scenario.class).addTemplate("valid-1", new Rule() {
+            {
+                add("scenarioId", "mockScenario");
+                add("topicName", "mockTopic");
+                add("priority", 1L);
+                add("condition", one(Condition.class, "valid"));
+                add("variables", has(1).of(Variable.class, "long"));
+            }
+        });
+
+        Fixture.of(Scenario.class).addTemplate("valid-2", new Rule() {
+            {
+                add("scenarioId", "mockScenario");
+                add("topicName", "mockTopic");
+                add("priority", 2L);
+                add("condition", one(Condition.class, "valid"));
+                add("variables", has(1).of(Variable.class, "script"));
+            }
+        });
+
+        Fixture.of(Scenario.class).addTemplate("valid-falseCondition", new Rule() {
+            {
+                add("scenarioId", "mockScenario");
+                add("topicName", "mockTopic");
+                add("priority", 2L);
+                add("condition", one(Condition.class, "valid-false"));
+                add("variables", has(1).of(Variable.class, "script"));
             }
         });
 

@@ -12,7 +12,7 @@ public class ScenarioEntityFixture implements TemplateLoader {
             {
                 add("topicName", "mockTopic");
                 add("scenarioId", "mockScenario");
-                add("order", 1L);
+                add("priority", 1L);
                 add("condition", one(ConditionEntity.class, "valid"));
                 add("variables", has(4).of(VariableEntity.class, "boolean", "string", "long", "script"));
             }

@@ -61,9 +61,10 @@ public class MockServiceHandler implements ExternalTaskHandler {
         List<Scenario> scenarios = queryScenario.queryScenarios(topicName);
 
         if (scenarios.isEmpty()) {
-            LOGGER.error("No Scenario found for topic {} not found in database", topicName);
+            LOGGER.error("No Scenario found in database for topic {}", topicName);
             externalTaskService.handleFailure(externalTask, "SCENARIO_ABSENT",
                     "Mock Scenario not found for topic " + topicName, 0, 0);
+            return;
         }
 
         Set<Scenario> matchScenarios = new HashSet<Scenario>();
@@ -76,17 +77,18 @@ public class MockServiceHandler implements ExternalTaskHandler {
             LOGGER.error("No matching condition found for topic {} scenarios", topicName);
             externalTaskService.handleFailure(externalTask, "MATCHING_CONDITION_ABSENT",
                     "No matching condition found for topic " + topicName, 0, 0);
+            return;
         }
 
         Optional<Scenario> scenarioOpt =
-                matchScenarios.stream().sorted(Comparator.comparingLong(Scenario::getOrder))
+                matchScenarios.stream().sorted(Comparator.comparingLong(Scenario::getPriority))
                         .collect(Collectors.toList()).stream().findFirst();
 
-        Map<String, Object> variables = new HashMap<>();
+        Map<String, Object> handlerVariables = new HashMap<>();
         Map<String, Object> errors = new HashMap<>();
-        variables.putAll(scenarioOpt.get().getVariables().stream()
+        handlerVariables.putAll(scenarioOpt.get().getVariables().stream()
                 .collect(Collectors.toMap(Variable::getName, variable -> {
-                    return handleVariable(externalTask, variables, errors, variable);
+                    return handleVariable(externalTask, handlerVariables, errors, variable);
                 })));
 
         if (!errors.isEmpty()) {
@@ -95,13 +97,14 @@ public class MockServiceHandler implements ExternalTaskHandler {
                             + " and Scenario-Id " + scenarioOpt.get().getScenarioId() + " - "
                             + errors,
                     0, 0);
+            return;
         }
 
-        LOGGER.info("Execution completed with variables [[[{}]]]", variables);
-        externalTaskService.complete(externalTask, variables);
+        LOGGER.info("Execution completed with variables [[[{}]]]", handlerVariables);
+        externalTaskService.complete(externalTask, handlerVariables);
     }
 
-    private boolean handleCondition(ExternalTask externalTask, Condition condition) {
+    protected boolean handleCondition(ExternalTask externalTask, Condition condition) {
         try {
             return (Boolean) evalScript(condition.getConditionScript(),
                     externalTask.getAllVariables());
@@ -113,7 +116,9 @@ public class MockServiceHandler implements ExternalTaskHandler {
 
     }
 
-    protected Object evalScript(String script, Map<String, Object>... envVars) throws Exception {
+    @SafeVarargs
+    protected final Object evalScript(String script, Map<String, Object>... envVars)
+            throws Exception {
 
         Binding binding = new Binding();
         Arrays.asList(envVars).stream()
@@ -124,29 +129,20 @@ public class MockServiceHandler implements ExternalTaskHandler {
 
     protected Object handleVariable(ExternalTask externalTask, Map<String, Object> variables,
             Map<String, Object> errors, Variable variable) {
-        if (StringUtils.isNotEmpty(variable.getGroovyScript())) {
 
-            try {
+        try {
+            if (StringUtils.isNotEmpty(variable.getGroovyScript())) {
                 return evalScript(variable.getGroovyScript(), externalTask.getAllVariables(),
                         variables);
-            } catch (Exception e) {
-                LOGGER.error("Variable [[[" + variable + "]]] groovy script invalid");
-                errors.put(variable.getName(), e.getMessage());
-                return null;
             }
-
-        } else {
-            try {
-                return Class.forName(variable.getClassName()).getConstructor(String.class)
-                        .newInstance(variable.getValue());
-            } catch (Exception e) {
-                LOGGER.error("Variable [[[" + variable + "]]] invalid");
-                errors.put(variable.getName(), e.getMessage());
-                return e.getMessage();
-            }
-
+            return Class.forName(variable.getClassName()).getConstructor(String.class)
+                    .newInstance(variable.getValue());
+        } catch (Exception e) {
+            LOGGER.error("Variable [[[" + variable + "]]] invalid");
+            errors.put(variable.getName(), e.getMessage());
+            return null;
         }
-    }
 
+    }
 
 }

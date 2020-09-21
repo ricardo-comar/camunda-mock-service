@@ -13,6 +13,11 @@ public class ConditionFixture implements TemplateLoader {
                 add("conditionScript", "return true");
             }
         });
+        Fixture.of(Condition.class).addTemplate("valid-false", new Rule() {
+            {
+                add("conditionScript", "return false");
+            }
+        });
     }
 
 }

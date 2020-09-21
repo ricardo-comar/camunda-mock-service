@@ -18,7 +18,7 @@ public class Scenario {
 
     private Condition condition;    
 
-    private Long order;
+    private Long priority;
 
     private List<Variable> variables;
 }

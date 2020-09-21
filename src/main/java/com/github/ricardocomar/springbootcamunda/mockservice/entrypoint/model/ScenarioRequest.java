@@ -14,7 +14,7 @@ public class ScenarioRequest {
 
     private ConditionRequest condition;    
 
-    private Long order;
+    private Long priority;
     
     private List<VariableRequest> variables;
 
