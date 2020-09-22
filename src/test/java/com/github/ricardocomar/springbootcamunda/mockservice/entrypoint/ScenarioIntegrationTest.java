@@ -134,5 +134,10 @@ public class ScenarioIntegrationTest {
                         request.getTopicName(), created.getScenarioId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.delete("/scenario/{topicName}/{scenarioId}",
+                        request.getTopicName(), created.getScenarioId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());    
     }
 }

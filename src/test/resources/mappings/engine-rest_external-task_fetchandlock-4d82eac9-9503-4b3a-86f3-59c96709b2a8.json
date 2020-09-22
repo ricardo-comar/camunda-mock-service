@@ -3,12 +3,7 @@
   "name" : "engine-rest_external-task_fetchandlock",
   "request" : {
     "url" : "/engine-rest/external-task/fetchAndLock",
-    "method" : "POST",
-    "bodyPatterns" : [ {
-      "equalToJson" : "{\"workerId\":\"mockTopicWorker\",\"maxTasks\":10,\"usePriority\":true,\"asyncResponseTimeout\":1000,\"topics\":[{\"topicName\":\"mockTopic\",\"lockDuration\":20000,\"variables\":null,\"businessKey\":null,\"processDefinitionId\":null,\"processDefinitionIdIn\":null,\"processDefinitionKey\":null,\"processDefinitionKeyIn\":null,\"processDefinitionVersionTag\":null,\"withoutTenantId\":false,\"tenantIdIn\":null}]}",
-      "ignoreArrayOrder" : true,
-      "ignoreExtraElements" : true
-    } ]
+    "method" : "POST"
   },
   "response" : {
     "status" : 200,

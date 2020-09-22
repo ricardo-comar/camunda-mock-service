@@ -26,6 +26,6 @@ public class EntrypointExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseBody
     public ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
-        return new ResponseEntity<Object>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
