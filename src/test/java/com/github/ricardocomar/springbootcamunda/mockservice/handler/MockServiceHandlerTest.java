@@ -80,6 +80,26 @@ public class MockServiceHandlerTest {
     }
 
     @Test
+    public void testValidRegisterTopic() {
+        String topicName = "mockTopic";
+
+        assertThat(handler.isTopicRegistred(topicName), equalTo(false));
+        
+        handler.registerTopic(topicName);
+        assertThat(handler.isTopicRegistred(topicName), equalTo(true));
+        
+        handler.removeTopic(topicName);
+        assertThat(handler.isTopicRegistred(topicName), equalTo(false));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidRegisterTopic() {
+        String topicName = "mockTopic";
+        handler.registerTopic(topicName);
+        handler.registerTopic(topicName);
+    }
+    
+    @Test
     public void testScriptValid() throws Exception {
 
         variables.put("myVar", 4);
