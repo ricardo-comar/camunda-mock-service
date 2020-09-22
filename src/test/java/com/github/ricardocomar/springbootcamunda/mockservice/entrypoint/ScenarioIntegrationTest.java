@@ -3,7 +3,6 @@ package com.github.ricardocomar.springbootcamunda.mockservice.entrypoint;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
 import javax.transaction.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricardocomar.springbootcamunda.mockservice.MockServiceApplication;
@@ -81,13 +80,17 @@ public class ScenarioIntegrationTest {
 
         Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
 
-        String contentGet = this.mockMvc
-                .perform(MockMvcRequestBuilders
-                        .get("/scenario/{topicName}/{scenarioId}", request.getTopicName(), created.getScenarioId())
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString();
+        String contentGet =
+                this.mockMvc
+                        .perform(
+                                MockMvcRequestBuilders
+                                        .get("/scenario/{topicName}/{scenarioId}",
+                                                request.getTopicName(), created.getScenarioId())
+                                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isOk())
+                        .andExpect(MockMvcResultMatchers.content()
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse().getContentAsString();
 
         Scenario queried = new ObjectMapper().readValue(contentGet, Scenario.class);
 

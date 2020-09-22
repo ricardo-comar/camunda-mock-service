@@ -2,14 +2,17 @@ package com.github.ricardocomar.springbootcamunda.mockservice.entrypoint;
 
 import javax.transaction.Transactional;
 import com.github.ricardocomar.springbootcamunda.mockservice.MockServiceApplication;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,7 +25,11 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 @DirtiesContext
 @SpringBootTest(classes = MockServiceApplication.class)
 @Transactional
+@ActiveProfiles("int-test")
 public class ExternalServiceIntegrationTest {
+
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(8888, 8889);
 
     @Autowired
     private WebApplicationContext wac;
