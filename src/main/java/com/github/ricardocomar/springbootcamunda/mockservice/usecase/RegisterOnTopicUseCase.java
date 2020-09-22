@@ -20,7 +20,7 @@ public class RegisterOnTopicUseCase {
     public void registerTopic(String topic) {
 
         ExternalTaskClient client = ExternalTaskClient.create().baseUrl(engineUrl)
-                .backoffStrategy(new ExponentialBackoffStrategy(0, 0, 0)).workerId(topic + "Worker")
+                .backoffStrategy(new ExponentialBackoffStrategy(1000, 50, 3000)).workerId(topic + "Worker")
                 .asyncResponseTimeout(1000).build();
 
         client.subscribe(topic).handler(handler).open();
