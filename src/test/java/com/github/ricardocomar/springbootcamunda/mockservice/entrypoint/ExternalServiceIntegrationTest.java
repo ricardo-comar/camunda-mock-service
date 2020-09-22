@@ -5,7 +5,7 @@ import com.github.ricardocomar.springbootcamunda.mockservice.MockServiceApplicat
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 @ActiveProfiles("int-test")
 public class ExternalServiceIntegrationTest {
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8888, 8889);
+    @ClassRule
+    public static WireMockRule wireMockRule = new WireMockRule(8888, 8889);
 
     @Autowired
     private WebApplicationContext wac;
