@@ -1,6 +1,7 @@
 package com.github.ricardocomar.springbootcamunda.mockservice.gateway.repository;
 
 import java.util.List;
+import java.util.Optional;
 import com.github.ricardocomar.springbootcamunda.mockservice.gateway.entity.ScenarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ScenarioRepository extends JpaRepository<ScenarioEntity, String>{
 
     public List<ScenarioEntity> findByTopicName(String topicName);
+
+    public Optional<ScenarioEntity> findByTopicNameAndPriority(String topicName, Integer priority);
 
 }

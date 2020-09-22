@@ -22,12 +22,17 @@ public class QueryScenarioGateway {
     public Optional<Scenario> query(String topicName, String scenarioId) {
 
         Optional<ScenarioEntity> scenario = repository.findById(scenarioId);
-
         return scenario.map(e -> Optional.of(mapper.fromEntity(e)).orElse(null));
     }
 
     public List<Scenario> query(String topicName) {
         return repository.findByTopicName(topicName).stream().map(e -> mapper.fromEntity(e))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<Scenario> query(String topicName, Integer priority) {
+
+        Optional<ScenarioEntity> scenario = repository.findByTopicNameAndPriority(topicName, priority);
+        return scenario.map(e -> Optional.of(mapper.fromEntity(e)).orElse(null));
     }
 }

@@ -12,7 +12,7 @@ public class ScenarioFixture implements TemplateLoader {
             {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
-                add("priority", 1L);
+                add("priority", 1);
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(4).of(Variable.class, "boolean", "string", "long", "script"));
             }
@@ -22,7 +22,7 @@ public class ScenarioFixture implements TemplateLoader {
             {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
-                add("priority", 1L);
+                add("priority", 1);
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(1).of(Variable.class, "long"));
             }
@@ -32,7 +32,7 @@ public class ScenarioFixture implements TemplateLoader {
             {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
-                add("priority", 2L);
+                add("priority", 2);
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(1).of(Variable.class, "script"));
             }
@@ -42,7 +42,7 @@ public class ScenarioFixture implements TemplateLoader {
             {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
-                add("priority", 2L);
+                add("priority", 2);
                 add("condition", one(Condition.class, "valid-false"));
                 add("variables", has(1).of(Variable.class, "script"));
             }

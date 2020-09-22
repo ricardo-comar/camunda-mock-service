@@ -13,6 +13,10 @@ public class QueryScenarioUseCase {
     @Autowired
     private QueryScenarioGateway gateway;
 
+    public Optional<Scenario> queryDuplicated(String topicName, Integer priority) {
+        return gateway.query(topicName, priority);
+    }
+
     public Optional<Scenario> queryScenario(String topicName, String scenarioId) {
         return gateway.query(topicName, scenarioId);
     }

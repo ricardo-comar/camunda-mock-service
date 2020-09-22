@@ -1,3 +1,0 @@
-camunda:
-  engine:
-    url:  http://localhost:8888/engine-rest

@@ -31,7 +31,7 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
         // ruleFor("scenarioId", Scenario::getScenarioId).must(not(nullValue()))
         //         .withMessage("Scenario is mandatory").critical();
 
-        ruleFor("order", Scenario::getPriority).must(greaterThanOrEqual(1L))
+        ruleFor("order", Scenario::getPriority).must(greaterThanOrEqual(1))
                 .withMessage("Priority is mandatory").critical();
 
         ruleFor("condition", Scenario::getCondition).must(not(nullValue()))

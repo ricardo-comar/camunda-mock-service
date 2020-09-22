@@ -32,7 +32,7 @@ public class ScenarioEntity {
     private String topicName;
 
     @Column(nullable = false)
-    private Long priority;
+    private Integer priority;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ConditionEntity condition;    

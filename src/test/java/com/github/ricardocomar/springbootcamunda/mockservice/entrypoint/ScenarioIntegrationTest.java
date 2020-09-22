@@ -48,7 +48,7 @@ public class ScenarioIntegrationTest {
     }
 
     @Test
-    public void testInvalidGetScenario() throws Exception {
+    public void testAbsentScenario() throws Exception {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/scenario/noTopic/noScenario")
@@ -76,8 +76,6 @@ public class ScenarioIntegrationTest {
                         .value(Matchers.is("return true")))
                 .andReturn().getResponse().getContentAsString();
 
-        ;
-
         Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
 
         String contentGet =
@@ -94,8 +92,47 @@ public class ScenarioIntegrationTest {
 
         Scenario queried = new ObjectMapper().readValue(contentGet, Scenario.class);
 
+        // Confirm both created and queried are equal
         assertThat(created, equalTo(queried));
 
+        // Cannot insert with same topic and priority
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    public void testDeleteScenario() throws Exception {
+        ScenarioRequest request = Fixture.from(ScenarioRequest.class).gimme("valid");
+        String requestString = new ObjectMapper().writeValueAsString(request);
+
+        String responseString = this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn().getResponse()
+                .getContentAsString();
+        Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/scenario/{topicName}/{scenarioId}",
+                        request.getTopicName(), created.getScenarioId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.delete("/scenario/{topicName}/{scenarioId}",
+                        request.getTopicName(), created.getScenarioId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));    
+
+        // Created scenario can't be returned again
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/scenario/{topicName}/{scenarioId}",
+                        request.getTopicName(), created.getScenarioId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
