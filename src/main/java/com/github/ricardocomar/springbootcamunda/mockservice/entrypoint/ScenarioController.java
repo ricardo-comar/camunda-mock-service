@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,8 @@ public class ScenarioController {
     @Autowired
     private ScenarioRequestMapper mapper;
 
-    @PostMapping(path = "/scenario")
+    @PostMapping(path = "/scenario", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerScenario(
             @RequestBody(required = true) final ScenarioRequest request) {
 
@@ -44,7 +46,7 @@ public class ScenarioController {
 
     }
 
-    @GetMapping(path = "/scenario/{topic}/{scenarioId}")
+    @GetMapping(path = "/scenario/{topic}/{scenarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> queryScenario(@PathVariable final String topic,
             @PathVariable final String scenarioId) {
 
