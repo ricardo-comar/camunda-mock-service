@@ -9,8 +9,8 @@
 		<version>2.3.3.RELEASE</version>
 	</parent>
 	<groupId>com.github.ricardo-comar.spring-boot-camunda</groupId>
-	<artifactId>mock-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>camunda-mock-service</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>order-service</name>
 	<description>Demo project for Camunda Integration</description>
 
