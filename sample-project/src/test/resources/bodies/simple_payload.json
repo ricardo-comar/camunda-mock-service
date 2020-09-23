@@ -1,0 +1,7 @@
+{
+  "businessKey":"${businessKey}", 
+  "variables": {
+    "id": {"value":"test_id","type":"String"},
+    "value":{"value":"100.0","type":"Double"}
+  }
+}

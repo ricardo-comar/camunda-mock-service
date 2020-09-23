@@ -1,0 +1,14 @@
+{
+  "topicName": "topicSimple",
+  "priority": 10,
+  "condition": {
+      "conditionScript": "return true"
+  },
+  "variables": [
+    {
+      "className": "java.lang.Boolean",
+      "name": "messageApproved",
+      "value": "true"
+    }
+  ]
+}
