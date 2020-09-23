@@ -58,6 +58,12 @@ class SimpleOrderSimulation extends Simulation {
         jsonPath("$[?(@.name=='messageApproved')].value").is("true")
       )
     ) 
+    .exec(http("Process Variables") 
+      .delete("/deployment/${deploymentId}?cascade=true")
+      .check(
+        status.is(204)
+      )
+    ) 
 
   setUp( 
     simple.inject(atOnceUsers(1)) 
