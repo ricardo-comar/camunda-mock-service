@@ -4,27 +4,37 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0tef3kv</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0tef3kv" sourceRef="StartEvent_1" targetRef="Activity_18sgw7y" />
+    <bpmn:sequenceFlow id="Flow_0tef3kv" sourceRef="StartEvent_1" targetRef="Activity_1ft4zzt" />
     <bpmn:endEvent id="Event_0scw2i5">
       <bpmn:incoming>Flow_1t8dmu2</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_18sgw7y" name="Simple External Service" camunda:type="external" camunda:topic="topicSimple">
-      <bpmn:incoming>Flow_0tef3kv</bpmn:incoming>
+      <bpmn:incoming>Flow_08ps8hn</bpmn:incoming>
       <bpmn:outgoing>Flow_1t8dmu2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1t8dmu2" sourceRef="Activity_18sgw7y" targetRef="Event_0scw2i5" />
+    <bpmn:sequenceFlow id="Flow_08ps8hn" sourceRef="Activity_1ft4zzt" targetRef="Activity_18sgw7y" />
+    <bpmn:serviceTask id="Activity_1ft4zzt" name="Test Topic" camunda:type="external" camunda:topic="testTOpic">
+      <bpmn:incoming>Flow_0tef3kv</bpmn:incoming>
+      <bpmn:outgoing>Flow_08ps8hn</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Simple_Process">
       <bpmndi:BPMNEdge id="Flow_0tef3kv_di" bpmnElement="Flow_0tef3kv">
         <di:waypoint x="215" y="117" />
-        <di:waypoint x="338" y="117" />
-        <di:waypoint x="338" y="130" />
-        <di:waypoint x="400" y="130" />
+        <di:waypoint x="300" y="117" />
+        <di:waypoint x="300" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1t8dmu2_di" bpmnElement="Flow_1t8dmu2">
         <di:waypoint x="500" y="117" />
         <di:waypoint x="662" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08ps8hn_di" bpmnElement="Flow_08ps8hn">
+        <di:waypoint x="338" y="190" />
+        <di:waypoint x="338" y="174" />
+        <di:waypoint x="450" y="174" />
+        <di:waypoint x="450" y="157" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
@@ -34,6 +44,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ghza4h_di" bpmnElement="Activity_18sgw7y" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
         <dc:Bounds x="400" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1484z6s_di" bpmnElement="Activity_1ft4zzt">
+        <dc:Bounds x="288" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
