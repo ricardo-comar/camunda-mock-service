@@ -74,11 +74,6 @@ public class LoadScenariosRunner implements ApplicationRunner {
     private void loadFile(Path jsonFile) {
         try {
             Scenario scenario = mapper.readValue(jsonFile.toFile(), Scenario.class);
-            if (scenario == null) {
-                LOGGER.error("File {} is empty",jsonFile.getFileName());
-                return;
-
-            }
 
             ValidationResult validation = validator.validate(scenario);
             if (!validation.isValid()) {
@@ -105,9 +100,6 @@ public class LoadScenariosRunner implements ApplicationRunner {
 
         } catch (IOException e) {
             LOGGER.error("Error reading file " + jsonFile.getFileName(), e);
-            return;
-        } catch (ValidationException e) {
-            LOGGER.error("Invalid content on file " + jsonFile.getFileName(), e);
             return;
         }
     }
