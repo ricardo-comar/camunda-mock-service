@@ -29,11 +29,15 @@ Now you can make your changes to the BMPN process and run tests again to check t
 
 
 ## CI Setup
-Jenkins is a little tricky, at the time I made this documentation I had to do a few anoying steps to set it up... If you know a better way to do the setup please let me know :grin:
-- First, access the landing page at http://localhost:8080, and you can retrieve the secret password running `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`
-- After first setup, you need to identify the container id by `docker ps` and use it with `docker exec –it 8f59969cde4d /bin/bash` to gain access inside the image
+Jenkins is a little tricky, at the time I made this documentation I had to do a few anoying steps to set it up... The docker image comes with openjdk8, and this project needs java 1.9, so we need to install it.... But if you know a better way to do the setup please let me know :grin:
+- First, identify the container id by running `docker ps`
+- Access the landing page at http://localhost:8080, you can retrieve the initial secret password running `docker exec 8f59969cde4d cat /var/jenkins_home/secrets/initialAdminPassword`
+- Install Jenkins with basic plugins.
+- After first setup, you need to run `docker exec –it 8f59969cde4d /bin/bash` to gain access inside the image
 - Inside it, download the openjdk-11 and unzip into `/usr/local/jdk11/`
-- Back to browser, install Maven and Gatling plugins. On plugin configurations, add a Maven 3 installation named _M3_.
+- Back to browser, install Maven and Gatling plugins. 
+- On plugin configurations, add a Maven 3 installation named _M3_.
+- On main configuration, add an environment variable `JAVA_HOME` and value `/usr/local/jdk11/`
 - Create a new Pipeline Job and use the script below, changing your git repository. And just run it :sunglasses:
 ```groovy
     pipeline {
