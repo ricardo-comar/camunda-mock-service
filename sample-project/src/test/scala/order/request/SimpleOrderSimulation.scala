@@ -20,16 +20,10 @@ class SimpleOrderSimulation extends Simulation {
       .formUpload("data", "../../main/bpmn/simple_process.bpmn")
       .check(
         status.is(200),
-        jsonPath("$.id").saveAs("deploymentId")
+        jsonPath("$.id").saveAs("deploymentId"),
+        jsonPath("$.deployedProcessDefinitions..id").saveAs("processDefinitionKey")
       )
     )
-    .exec(http("Query Process Definition Key") 
-      .get("/process-definition?deploymentId=${deploymentId}")
-      .check(
-        status.is(200), 
-        jsonPath("$[0].id").saveAs("processDefinitionKey")
-      )
-    ).pause(1)
     .exec(http("Submit Process") 
       .post("/process-definition/${processDefinitionKey}/submit-form")
       .header("Content-Type", "application/json;charset=UTF-8")

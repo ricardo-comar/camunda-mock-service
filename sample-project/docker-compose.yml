@@ -16,6 +16,7 @@ services:
       - 50000:50000
     volumes:
       - ./target/jenkins/home:/var/jenkins_home
+      - ./target/jenkins/local:/usr/local
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/local/bin/docker:/usr/local/bin/docker
 
