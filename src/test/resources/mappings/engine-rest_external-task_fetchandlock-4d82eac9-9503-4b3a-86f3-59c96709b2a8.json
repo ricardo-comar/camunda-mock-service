@@ -16,6 +16,5 @@
   "uuid" : "4d82eac9-9503-4b3a-86f3-59c96709b2a8",
   "persistent" : true,
   "scenarioName" : "scenario-engine-rest-external-task-fetchAndLock",
-  "requiredScenarioState" : "scenario-engine-rest-external-task-fetchAndLock-4",
   "insertionIndex" : 12
 }

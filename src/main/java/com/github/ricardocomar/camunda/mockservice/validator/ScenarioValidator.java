@@ -38,7 +38,8 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
                 .withMessage("Condition is mandatory").whenever(not(nullValue()))
                 .withValidator(condValidator).critical();
 
-        ruleForEach("variables", Scenario::getVariables).whenever(not(nullValue()))
+        ruleForEach("variables", Scenario::getVariables).must(not(nullValue()))
+                .withMessage("Variables is mandatory").whenever(not(nullValue()))
                 .withValidator(varValidator).critical();
 
     }

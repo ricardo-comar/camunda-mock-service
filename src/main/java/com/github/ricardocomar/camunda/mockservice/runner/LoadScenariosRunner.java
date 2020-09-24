@@ -65,7 +65,7 @@ public class LoadScenariosRunner implements ApplicationRunner {
 
             try (Stream<Path> paths = Files.walk(rootFolder.toPath())) {
                 paths
-                // .filter(file -> file.getFileName().endsWith(FILES_PATTERN))
+                        // .filter(file -> file.getFileName().endsWith(FILES_PATTERN))
                         .filter(Files::isRegularFile).forEach(this::loadFile);
             }
         }
@@ -74,9 +74,17 @@ public class LoadScenariosRunner implements ApplicationRunner {
     private void loadFile(Path jsonFile) {
         try {
             Scenario scenario = mapper.readValue(jsonFile.toFile(), Scenario.class);
+            if (scenario == null) {
+                LOGGER.error("File {} is empty",jsonFile.getFileName());
+                return;
+
+            }
 
             ValidationResult validation = validator.validate(scenario);
-            validation.isInvalidThrow(CreateScenarioValidationException.class);
+            if (!validation.isValid()) {
+                LOGGER.error("File {} is invalid: {}",jsonFile.getFileName());
+                return;
+            }
 
             Optional<Scenario> queryDuplicated =
                     queryUC.queryDuplicated(scenario.getTopicName(), scenario.getPriority());
