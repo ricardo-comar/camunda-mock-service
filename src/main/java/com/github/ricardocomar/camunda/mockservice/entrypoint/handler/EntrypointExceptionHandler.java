@@ -20,7 +20,7 @@ public class EntrypointExceptionHandler extends ResponseEntityExceptionHandler {
 
         ValidationException vex = (ValidationException) ex;
         return new ResponseEntity<Object>(vex.getValidationResult(), new HttpHeaders(),
-                HttpStatus.FORBIDDEN);
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Throwable.class)
