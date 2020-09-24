@@ -74,21 +74,6 @@ public class LoadScenariosRunner implements ApplicationRunner {
     private void loadFile(Path jsonFile) {
         try {
             Scenario scenario = mapper.readValue(jsonFile.toFile(), Scenario.class);
-
-            ValidationResult validation = validator.validate(scenario);
-            if (!validation.isValid()) {
-                LOGGER.error("File {} is invalid: {}",jsonFile.getFileName());
-                return;
-            }
-
-            Optional<Scenario> queryDuplicated =
-                    queryUC.queryDuplicated(scenario.getTopicName(), scenario.getPriority());
-            if (queryDuplicated.isPresent()) {
-                LOGGER.error("Scenario for topic {} and priority {} already registred ",
-                        scenario.getTopicName(), scenario.getPriority());
-                return;
-            }
-
             saveUC.save(scenario);
 
             if (!regTopic.isTopicRegistred(scenario.getTopicName())) {
@@ -98,7 +83,7 @@ public class LoadScenariosRunner implements ApplicationRunner {
             LOGGER.info("Scenario for topic {} and priority {} registred!!",
                     scenario.getTopicName(), scenario.getPriority());
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("Error reading file " + jsonFile.getFileName(), e);
             return;
         }

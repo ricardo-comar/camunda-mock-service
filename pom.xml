@@ -212,6 +212,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Application.*</exclude>
+                        <exclude>**/*Exception.*</exclude>
+                    </excludes>
+                </configuration>                
             </plugin>
 
 			<plugin>
