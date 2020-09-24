@@ -2,6 +2,7 @@
 # Camunda External Service Mock
 
 Project created, while learning the Camunda BPMN tool, to accelerate the models created to exercise the learned stereotypes. A second project is also under development [here](https://github.com/ricardo-comar/spring-boot-camunda), to recreate a real life (!?) scenario and using real (!?!?!?) components.
+
 ![!simple_flow](img/simple_process.png)
 
 When a well structured version was released, it was used to create a regressive test suite of the models, allowing the flow to continue flowing inside Camunda when using External Tasks. 
