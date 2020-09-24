@@ -1,13 +1,8 @@
 package com.github.ricardocomar.camunda.mockservice.runner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.empty;
-
-
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;

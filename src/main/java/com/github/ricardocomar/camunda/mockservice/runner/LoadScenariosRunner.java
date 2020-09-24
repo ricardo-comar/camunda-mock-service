@@ -1,29 +1,20 @@
 package com.github.ricardocomar.camunda.mockservice.runner;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
-import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
 import com.github.ricardocomar.camunda.mockservice.usecase.RegisterOnTopicUseCase;
 import com.github.ricardocomar.camunda.mockservice.usecase.SaveScenarioUseCase;
-import com.github.ricardocomar.camunda.mockservice.validator.CreateScenarioValidationException;
-import com.github.ricardocomar.camunda.mockservice.validator.ScenarioValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import br.com.fluentvalidator.context.ValidationResult;
-import br.com.fluentvalidator.exception.ValidationException;
 
 @Component
 public class LoadScenariosRunner implements ApplicationRunner {
@@ -33,16 +24,10 @@ public class LoadScenariosRunner implements ApplicationRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadScenariosRunner.class);
 
     @Autowired
-    private QueryScenarioUseCase queryUC;
-
-    @Autowired
     private SaveScenarioUseCase saveUC;
 
     @Autowired
     private RegisterOnTopicUseCase regTopic;
-
-    @Autowired
-    private ScenarioValidator validator;
 
     private final ObjectMapper mapper =
             new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

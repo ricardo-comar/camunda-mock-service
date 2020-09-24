@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -54,6 +55,32 @@ public class ScenarioIntegrationTest {
                 .perform(MockMvcRequestBuilders.get("/scenario/noTopic/noScenario")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+
+
+    @Test
+    public void testExceptionHandler() throws Exception {
+
+        ScenarioRequest request = Fixture.from(ScenarioRequest.class).gimme("valid");
+        request.setCondition(null);
+        String requestString = new ObjectMapper().writeValueAsString(request);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        ScenarioController controller = wac.getBean(ScenarioController.class);
+        ReflectionTestUtils.setField(controller, "queryScenario", null);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/scenario/{topicName}/{scenarioId}", "t", "s")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+
     }
 
     @Test
@@ -122,11 +149,13 @@ public class ScenarioIntegrationTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.delete("/scenario/{topicName}/{scenarioId}",
-                        request.getTopicName(), created.getScenarioId())
-                        .accept(MediaType.APPLICATION_JSON))
+                .perform(
+                        MockMvcRequestBuilders
+                                .delete("/scenario/{topicName}/{scenarioId}",
+                                        request.getTopicName(), created.getScenarioId())
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));    
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
 
         // Created scenario can't be returned again
         this.mockMvc
@@ -135,9 +164,11 @@ public class ScenarioIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         this.mockMvc
-                .perform(MockMvcRequestBuilders.delete("/scenario/{topicName}/{scenarioId}",
-                        request.getTopicName(), created.getScenarioId())
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());    
+                .perform(
+                        MockMvcRequestBuilders
+                                .delete("/scenario/{topicName}/{scenarioId}",
+                                        request.getTopicName(), created.getScenarioId())
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
