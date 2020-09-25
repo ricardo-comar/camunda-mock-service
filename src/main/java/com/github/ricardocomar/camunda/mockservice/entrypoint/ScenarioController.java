@@ -46,8 +46,8 @@ public class ScenarioController {
 
         Optional<Scenario> scenario = queryScenario.queryDuplicated(request.getTopicName(), request.getPriority());
         if (scenario.isPresent()) {
-            LOGGER.warn("Scenario for topic {} and priority {} found", request.getTopicName(), request.getPriority());
-            return ResponseEntity.badRequest().build();
+            LOGGER.warn("Scenario for topic {} and priority {} found, will be replaced", request.getTopicName(), request.getPriority());
+            removeScenario.remove(scenario.get());
         }
 
         Scenario newScenario = saveScenario.save(mapper.fromRequest(request));
