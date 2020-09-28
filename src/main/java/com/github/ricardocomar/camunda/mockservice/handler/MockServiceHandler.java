@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import com.github.ricardocomar.camunda.mockservice.model.Condition;
 import com.github.ricardocomar.camunda.mockservice.model.Delay;
+import com.github.ricardocomar.camunda.mockservice.model.Failure;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
@@ -70,12 +71,10 @@ public class MockServiceHandler implements ExternalTaskHandler {
             return;
         }
 
-        Set<Scenario> matchScenarios = new HashSet<Scenario>();
-        for (Scenario scenario : scenarios) {
-            if (handleCondition(externalTask, scenario.getCondition())) {
-                matchScenarios.add(scenario);
-            }
-        }
+        Set<Scenario> matchScenarios =
+                scenarios.stream().filter(s -> handleCondition(externalTask, s.getCondition()))
+                        .collect(Collectors.toSet());
+
         if (matchScenarios.isEmpty()) {
             LOGGER.error("No matching condition found for topic {} scenarios", topicName);
             externalTaskService.handleFailure(externalTask, "MATCHING_CONDITION_ABSENT",
@@ -83,13 +82,26 @@ public class MockServiceHandler implements ExternalTaskHandler {
             return;
         }
 
-        Optional<Scenario> scenarioOpt =
+        Scenario scenario =
                 matchScenarios.stream().sorted(Comparator.comparingLong(Scenario::getPriority))
-                        .collect(Collectors.toList()).stream().findFirst();
+                        .collect(Collectors.toList()).stream().findFirst().get();
+
+        handleDelay(scenario.getDelay());
+
+
+        if (scenario.getFailure() != null) {
+            Failure failure = scenario.getFailure();
+            LOGGER.info("Scenario with expected failure :{} ", failure.getMessage());
+            externalTaskService.handleFailure(externalTask, failure.getMessage(),
+                    failure.getDetails(), Optional.of(failure.getRetryTimes()).orElse(0),
+                    Optional.of(failure.getRetryTimeout()).orElse(0L));
+            return;
+        }
+
 
         Map<String, Object> handlerVariables = new HashMap<>();
         Map<String, Object> errors = new HashMap<>();
-        handlerVariables.putAll(scenarioOpt.get().getVariables().stream()
+        handlerVariables.putAll(scenario.getVariables().stream()
                 .collect(Collectors.toMap(Variable::getName, variable -> {
                     return handleVariable(externalTask, handlerVariables, errors, variable);
                 })));
@@ -97,13 +109,10 @@ public class MockServiceHandler implements ExternalTaskHandler {
         if (!errors.isEmpty()) {
             externalTaskService.handleFailure(externalTask, "SCENARIO_VARIABLE_INVALID",
                     "Mock Scenario with invalid variables definition for topic " + topicName
-                            + " and Scenario-Id " + scenarioOpt.get().getScenarioId() + " - "
-                            + errors,
+                            + " and Scenario-Id " + scenario.getScenarioId() + " - " + errors,
                     0, 0);
             return;
         }
-
-        handleDelay(scenarioOpt.get().getDelay());
 
         LOGGER.info("Execution completed with variables [[[{}]]]", handlerVariables);
         externalTaskService.complete(externalTask, handlerVariables);

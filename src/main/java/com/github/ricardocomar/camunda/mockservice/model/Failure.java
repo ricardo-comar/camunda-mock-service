@@ -15,6 +15,6 @@ public class Failure {
 
     private Integer retryTimes;
 
-    private Integer retryTimeout;
+    private Long retryTimeout;
 
 }
