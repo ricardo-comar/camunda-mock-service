@@ -20,9 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(uniqueConstraints={
-    @UniqueConstraint(columnNames = {"topicName", "priority"})
-}) 
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"topicName", "priority"})})
 public class ScenarioEntity {
 
     @Id
@@ -35,22 +33,20 @@ public class ScenarioEntity {
     private Integer priority;
 
     @Embedded
-    @AttributeOverride(
-        name = "fixedMs",
-        column = @Column( name = "delay_fixedms" )
-    )
-    @AttributeOverride(
-        name = "minMs",
-        column = @Column( name = "delay_minms" )
-    )
-    @AttributeOverride(
-        name = "maxMs",
-        column = @Column( name = "delay_maxms" )
-    )    
+    @AttributeOverride(name = "fixedMs", column = @Column(name = "delay_fixedms"))
+    @AttributeOverride(name = "minMs", column = @Column(name = "delay_minms"))
+    @AttributeOverride(name = "maxMs", column = @Column(name = "delay_maxms"))
     private DelayEmbeddable delay;
 
+    @Embedded
+    @AttributeOverride(name = "message", column = @Column(name = "failure_message"))
+    @AttributeOverride(name = "details", column = @Column(name = "failure_details"))
+    @AttributeOverride(name = "retryTimes", column = @Column(name = "failure_retryTimes"))
+    @AttributeOverride(name = "retryTimeout", column = @Column(name = "failure_retryTimeout"))
+    private FailureEmbeddable failure;
+
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private ConditionEntity condition;    
+    private ConditionEntity condition;
 
     @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<VariableEntity> variables;

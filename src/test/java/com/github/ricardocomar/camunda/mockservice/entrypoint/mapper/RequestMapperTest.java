@@ -40,11 +40,9 @@ public class RequestMapperTest {
     public void testRequestToModel() {
         assertThat(Fixture.from(Scenario.class).gimme("valid"),
                 equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid"))));
-    }
 
-    @Test
-    public void testRequestFailureToModel() {
         assertThat(Fixture.from(Scenario.class).gimme("valid-failure"),
                 equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid-failure"))));
     }
+
 }

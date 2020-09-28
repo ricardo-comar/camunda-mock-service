@@ -23,6 +23,11 @@ public class ScenarioEntityFixture implements TemplateLoader {
                 add("scenarioId", "mockScenario");
             }
         });
+        Fixture.of(ScenarioEntity.class).addTemplate("valid-failure").inherits("valid", new Rule() {
+            {
+                add("failure", one(FailureEmbeddable.class, "valid"));
+            }
+        });
 
     }
 
