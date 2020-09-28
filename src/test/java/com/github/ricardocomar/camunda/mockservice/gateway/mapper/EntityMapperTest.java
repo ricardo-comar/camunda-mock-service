@@ -29,6 +29,9 @@ public class EntityMapperTest {
     @Spy
     DelayEmbeddableMapper delayEmbeddableMapper = new DelayEmbeddableMapperImpl();
 
+    @Spy
+    FailureEmbeddableMapper failureEmbeddableMapper = new FailureEmbeddableMapperImpl();
+
 
     public EntityMapperTest() {
         FixtureFactoryLoader.loadTemplates(MockServiceApplication.class.getPackage().getName());
@@ -40,12 +43,19 @@ public class EntityMapperTest {
         assertThat(Fixture.from(ScenarioEntity.class).gimme("valid-saved"), equalToObject(
                 mapper.fromModel(Fixture.from(Scenario.class).gimme("valid-saved"))));
 
+        assertThat(Fixture.from(ScenarioEntity.class).gimme("valid-failure"), equalToObject(
+                mapper.fromModel(Fixture.from(Scenario.class).gimme("valid-failure"))));
+
     }
 
     @Test
     public void testEntityToModel() {
+
         assertThat(Fixture.from(Scenario.class).gimme("valid-saved"), equalToObject(
                 mapper.fromEntity(Fixture.from(ScenarioEntity.class).gimme("valid-saved"))));
+
+        assertThat(Fixture.from(Scenario.class).gimme("valid-failure"), equalToObject(
+                mapper.fromEntity(Fixture.from(ScenarioEntity.class).gimme("valid-failure"))));
     }
 
 }
