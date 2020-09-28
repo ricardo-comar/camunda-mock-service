@@ -237,4 +237,17 @@ public class MockServiceHandlerTest {
         Mockito.verify(externalTaskService, Mockito.only()).complete(eq(externalTask), any());
     }
 
+    @Test
+    public void testDesiredFailureCondition() {
+
+        scenarios.add(Fixture.from(Scenario.class).gimme("valid-failure"));
+
+        handler.execute(externalTask, externalTaskService);
+        assertThat(resultVariables.entrySet(), hasSize(0));
+
+        Mockito.verify(externalTaskService, Mockito.only()).handleFailure(eq(externalTask),
+                eq("FAILURE_FIXTURE"), eq("Expected Failure"), eq(3), eq(1000L));
+        Mockito.verify(externalTaskService, Mockito.never()).complete(eq(externalTask), any());
+    }
+
 }
