@@ -214,6 +214,8 @@
                 </executions>
                 <configuration>
                     <excludes>
+                        <exclude>**/model/*</exclude>
+                        <exclude>**/entity/*</exclude>
                         <exclude>**/*Application.*</exclude>
                         <exclude>**/*Exception.*</exclude>
                     </excludes>
