@@ -9,12 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,6 +33,7 @@ public class VariableEntity {
     private String groovyScript;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
     private ScenarioEntity scenario;
 
 }
