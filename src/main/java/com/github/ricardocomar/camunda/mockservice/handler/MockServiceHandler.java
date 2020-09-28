@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import com.github.ricardocomar.camunda.mockservice.model.Condition;
+import com.github.ricardocomar.camunda.mockservice.model.Delay;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
@@ -100,8 +103,26 @@ public class MockServiceHandler implements ExternalTaskHandler {
             return;
         }
 
+        handleDelay(scenarioOpt.get().getDelay());
+
         LOGGER.info("Execution completed with variables [[[{}]]]", handlerVariables);
         externalTaskService.complete(externalTask, handlerVariables);
+    }
+
+    protected void handleDelay(Delay delay) {
+
+        if (delay != null) {
+            Integer wait = Optional.ofNullable(delay.getFixedMs()).orElseGet(
+                    () -> ThreadLocalRandom.current().nextInt(delay.getMinMs(), delay.getMaxMs()));
+            LOGGER.info("Execution will sleep for {}ms...", wait);
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(wait);
+            } catch (InterruptedException e) {
+                LOGGER.info("Sleep finished ! Execution will carry on");
+            }
+
+        }
     }
 
     protected boolean handleCondition(ExternalTask externalTask, Condition condition) {

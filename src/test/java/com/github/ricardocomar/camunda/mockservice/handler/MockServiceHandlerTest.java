@@ -1,10 +1,10 @@
 package com.github.ricardocomar.camunda.mockservice.handler;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.model.Condition;
+import com.github.ricardocomar.camunda.mockservice.model.Delay;
+import com.github.ricardocomar.camunda.mockservice.model.Delay;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
@@ -134,6 +136,14 @@ public class MockServiceHandlerTest {
         assertThat(result, equalTo(15L));
     }
 
+    @Test
+    public void testHandleDelay() {
+
+        handler.handleDelay(null);
+        handler.handleDelay(new Delay(100, null, null));
+        handler.handleDelay(new Delay(null, 100, 200));
+    }
+    
     @Test
     public void testHandleVariableInvalid() {
 
