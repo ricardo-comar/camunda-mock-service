@@ -20,5 +20,7 @@ public class Scenario {
 
     private Integer priority;
 
+    private Delay delay;
+
     private List<Variable> variables;
 }

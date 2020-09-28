@@ -9,4 +9,6 @@ public interface VariableEntityMapper {
 
     public Variable fromEntity(VariableEntity entity);
 
+    public VariableEntity fromModel(Variable model);
+
 }
