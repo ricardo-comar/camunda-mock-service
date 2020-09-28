@@ -4,6 +4,9 @@
   "condition": {
       "conditionScript": "return true"
   },
+  "delay": {
+      "fixedMs": 100
+  },
   "variables": [
     {
       "className": "java.lang.Boolean",
