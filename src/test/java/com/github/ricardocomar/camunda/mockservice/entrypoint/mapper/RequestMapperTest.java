@@ -29,6 +29,9 @@ public class RequestMapperTest {
     @Spy
     DelayRequestMapper delayRequestMapper = new DelayRequestMapperImpl();
 
+    @Spy
+    FailureRequestMapper failureRequestMapper = new FailureRequestMapperImpl();
+
     public RequestMapperTest() {
         FixtureFactoryLoader.loadTemplates(MockServiceApplication.class.getPackage().getName());
     }
@@ -39,4 +42,9 @@ public class RequestMapperTest {
                 equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid"))));
     }
 
+    @Test
+    public void testRequestFailureToModel() {
+        assertThat(Fixture.from(Scenario.class).gimme("valid-failure"),
+                equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid-failure"))));
+    }
 }
