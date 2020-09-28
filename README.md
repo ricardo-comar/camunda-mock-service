@@ -27,6 +27,12 @@ Each scenario has a structure based on **condition**, **priority** and **variabl
       "minMs": 50, // minimum milisseconds wait time
       "maxMs": 200 // maximum milisseconds wait time
   },
+  "failure": { // Optional expected failure, to be handled by the camunda client
+      "message": "CUSTOM_KEY", // Message to expected failure
+      "details": "Expected Failure", // Message details to expected failure
+      "retryTimes": 3, // Number of retries 
+      "retryTimeout": 200 // Retry Timeout 
+  },
   "variables": [ // List of variables to be saved/updated on message
     {
       "name": "messageApproved", // Variable name
