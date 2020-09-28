@@ -17,7 +17,6 @@ import java.util.Map;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.model.Condition;
 import com.github.ricardocomar.camunda.mockservice.model.Delay;
-import com.github.ricardocomar.camunda.mockservice.model.Delay;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
