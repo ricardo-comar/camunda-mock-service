@@ -11,7 +11,9 @@ public class DelayHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelayHelper.class);
 
-    public final void handleDelay(Delay delay) {
+    private DelayHelper() {}
+
+    public static final void handleDelay(Delay delay) {
 
         if (delay != null) {
             Integer wait = Optional.ofNullable(delay.getFixedMs()).orElseGet(

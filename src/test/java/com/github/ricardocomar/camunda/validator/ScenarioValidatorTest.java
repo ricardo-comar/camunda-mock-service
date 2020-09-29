@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import java.util.Collections;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
-import com.github.ricardocomar.camunda.mockservice.model.Failure;
+import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.validator.ConditionValidator;
@@ -81,7 +81,7 @@ public class ScenarioValidatorTest {
 
         scenario  = Fixture.from(Scenario.class).gimme("valid");
         scenario.setVariables(Fixture.from(Variable.class).gimme(2, "script", "string"));
-        scenario.setFailure(Fixture.from(Failure.class).gimme("valid"));
+        scenario.setFailure(Fixture.from(ScenarioFailure.class).gimme("valid"));
         assertThat(validator.validate(scenario).isValid(), is(false));
 
         scenario.setVariables(null);

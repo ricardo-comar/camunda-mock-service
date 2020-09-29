@@ -15,9 +15,10 @@ public class VariableHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VariableHelper.class);
 
-    final ScriptHelper scriptHelper = new ScriptHelper();
+    private VariableHelper() {
+    }
 
-    public Map<String, Object> handleVariables(ExternalTask externalTask, Scenario scenario)
+    public static final Map<String, Object> handleVariables(ExternalTask externalTask, Scenario scenario)
             throws ServiceFailureException {
 
         Map<String, Object> localVariables = new HashMap<>();
@@ -38,12 +39,12 @@ public class VariableHelper {
         return localVariables;
     }
 
-    public final Object handleVariable(ExternalTask externalTask, Map<String, Object> variables,
+    private static final Object handleVariable(ExternalTask externalTask, Map<String, Object> variables,
             Map<String, Object> errors, Variable variable) {
 
         try {
             if (StringUtils.isNotEmpty(variable.getGroovyScript())) {
-                return scriptHelper.evalScript(variable.getGroovyScript(),
+                return ScriptHelper.evalScript(variable.getGroovyScript(),
                         externalTask.getAllVariables(), variables);
             }
             return Class.forName(variable.getClassName()).getConstructor(String.class)
@@ -51,7 +52,7 @@ public class VariableHelper {
         } catch (Exception e) {
             LOGGER.error("Variable [[[" + variable + "]]] invalid");
             errors.put(variable.getName(), e.getMessage());
-            return null;
+            return variable.getName();
         }
 
     }

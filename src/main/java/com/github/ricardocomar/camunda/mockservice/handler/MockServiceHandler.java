@@ -25,14 +25,6 @@ public class MockServiceHandler implements ExternalTaskHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExternalTaskHandler.class);
 
-    final ScenarioHelper scenarioHelper = new ScenarioHelper();
-
-    final VariableHelper variableHelper = new VariableHelper();
-
-    final ExceptionHelper exceptionHelper = new ExceptionHelper();
-
-    final DelayHelper delayHelper = new DelayHelper();
-
     final TopicHelper topicHelper = new TopicHelper();
 
     @Autowired
@@ -59,15 +51,15 @@ public class MockServiceHandler implements ExternalTaskHandler {
 
         try {
 
-            Scenario scenario = scenarioHelper.extractScenario(externalTask, topicName, scenarios);
+            Scenario scenario = ScenarioHelper.extractScenario(externalTask, topicName, scenarios);
 
-            delayHelper.handleDelay(scenario.getDelay());
+            DelayHelper.handleDelay(scenario.getDelay());
 
-            exceptionHelper.handlerFailure(scenario.getFailure());
+            ExceptionHelper.handlerFailure(scenario.getFailure());
 
-            exceptionHelper.handlerError(null);
+            ExceptionHelper.handlerError(scenario.getError());
 
-            Map<String, Object> handlerVariables = variableHelper.handleVariables(externalTask, scenario);
+            Map<String, Object> handlerVariables = VariableHelper.handleVariables(externalTask, scenario);
 
             LOGGER.info("Execution completed with variables [[[{}]]]", handlerVariables);
             externalTaskService.complete(externalTask, handlerVariables);

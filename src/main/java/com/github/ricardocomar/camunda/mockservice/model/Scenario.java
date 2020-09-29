@@ -22,7 +22,9 @@ public class Scenario {
 
     private Delay delay;
 
-    private Failure failure;
+    private ScenarioFailure failure;
+
+    private ScenarioError error;
 
     private List<Variable> variables;
 }

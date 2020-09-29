@@ -8,8 +8,7 @@ import groovy.lang.GroovyShell;
 public class ScriptHelper {
     
     @SafeVarargs
-    public final Object evalScript(String script, Map<String, Object>... envVars)
-            throws Exception {
+    public static final Object evalScript(String script, Map<String, Object>... envVars) {
 
         Binding binding = new Binding();
         Arrays.asList(envVars).stream()
