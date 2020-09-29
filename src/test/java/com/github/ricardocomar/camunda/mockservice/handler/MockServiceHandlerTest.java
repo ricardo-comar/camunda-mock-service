@@ -5,16 +5,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
+import com.github.ricardocomar.camunda.mockservice.handler.helper.ScriptHelper;
 import com.github.ricardocomar.camunda.mockservice.model.Condition;
 import com.github.ricardocomar.camunda.mockservice.model.Delay;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
@@ -48,6 +49,8 @@ public class MockServiceHandlerTest {
 
     @Mock
     private ExternalTaskService externalTaskService;
+
+    private final ScriptHelper scriptHelper = new ScriptHelper();
 
     private Map<String, Object> taskVariables;
     private Map<String, Object> variables;
@@ -104,7 +107,7 @@ public class MockServiceHandlerTest {
     public void testScriptValid() throws Exception {
 
         variables.put("myVar", 4);
-        Object result = handler.evalScript("return 7 * myVar", variables);
+        Object result = scriptHelper.evalScript("return 7 * myVar", variables);
 
         assertThat(errors.values(), hasSize(0));
         assertThat(variables.values(), hasSize(1));
@@ -116,7 +119,7 @@ public class MockServiceHandlerTest {
     public void testScriptError() throws Exception {
 
         variables.put("myVarX", 4);
-        Object result = handler.evalScript("return 7 * myVar", variables);
+        Object result = scriptHelper.evalScript("return 7 * myVar", variables);
 
         assertThat(errors.values(), hasSize(1));
         assertThat(variables.values(), hasSize(1));
@@ -128,7 +131,7 @@ public class MockServiceHandlerTest {
 
         variables.put("myVar", 4);
         Variable variable = new Variable("variable", "15", "java.lang.Long", null);
-        Object result = handler.handleVariable(externalTask, variables, errors, variable);
+        Object result = handler.variableHelper.handleVariable(externalTask, variables, errors, variable);
 
         assertThat(errors.values(), hasSize(0));
         assertThat(variables.values(), hasSize(1));
@@ -138,9 +141,9 @@ public class MockServiceHandlerTest {
     @Test
     public void testHandleDelay() {
 
-        handler.handleDelay(null);
-        handler.handleDelay(new Delay(100, null, null));
-        handler.handleDelay(new Delay(null, 100, 200));
+        handler.delayHelper.handleDelay(null);
+        handler.delayHelper.handleDelay(new Delay(100, null, null));
+        handler.delayHelper.handleDelay(new Delay(null, 100, 200));
     }
     
     @Test
@@ -148,7 +151,7 @@ public class MockServiceHandlerTest {
 
         variables.put("myVar", 4);
         Variable variable = new Variable("variable", "15", "xxx", null);
-        Object result = handler.handleVariable(externalTask, variables, errors, variable);
+        Object result = handler.variableHelper.handleVariable(externalTask, variables, errors, variable);
 
         assertThat(errors.values(), hasSize(1));
         assertThat(variables.values(), hasSize(1));
@@ -159,7 +162,7 @@ public class MockServiceHandlerTest {
     public void testHandleConditionSimple() {
 
         Condition condition = new Condition("return true");
-        Object result = handler.handleCondition(externalTask, condition);
+        Object result = handler.scenarioHelper.handleCondition(externalTask, condition);
 
         assertThat(result, equalTo(true));
     }
@@ -169,7 +172,7 @@ public class MockServiceHandlerTest {
 
         taskVariables.put("myVar", 5);
         Condition condition = new Condition("return myVar > 4");
-        Object result = handler.handleCondition(externalTask, condition);
+        Object result = handler.scenarioHelper.handleCondition(externalTask, condition);
 
         assertThat(result, equalTo(true));
     }
@@ -178,7 +181,7 @@ public class MockServiceHandlerTest {
     public void testHandleConditionNotBoolean() {
 
         Condition condition = new Condition("return 10");
-        Object result = handler.handleCondition(externalTask, condition);
+        Object result = handler.scenarioHelper.handleCondition(externalTask, condition);
 
         assertThat(result, equalTo(false));
     }
