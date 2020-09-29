@@ -3,11 +3,12 @@ package com.github.ricardocomar.camunda.mockservice.entrypoint;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import javax.transaction.Transactional;
+import static org.hamcrest.Matchers.not;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.entrypoint.model.ScenarioRequest;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,7 +30,6 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 @RunWith(SpringRunner.class)
 @DirtiesContext
 @SpringBootTest(classes = MockServiceApplication.class)
-@Transactional
 public class ScenarioIntegrationTest {
 
     @Autowired
@@ -76,8 +76,8 @@ public class ScenarioIntegrationTest {
                         .value(Matchers.is("return true")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").isEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.failure").isEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isNotEmpty())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isNotEmpty()).andReturn()
+                .getResponse().getContentAsString();
 
         Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
 
@@ -100,9 +100,9 @@ public class ScenarioIntegrationTest {
 
         // Cannot insert with same topic and priority
         // this.mockMvc
-        //         .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
-        //                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-        //         .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        // .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+        // .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        // .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -125,8 +125,8 @@ public class ScenarioIntegrationTest {
                         .value(Matchers.is("return true")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.failure").isEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isEmpty())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isEmpty()).andReturn()
+                .getResponse().getContentAsString();
 
         Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
 
@@ -148,6 +148,7 @@ public class ScenarioIntegrationTest {
         assertThat(created, equalTo(queried));
 
     }
+
     @Test
     public void testSaveScenarioFailure() throws Exception {
 
@@ -168,8 +169,8 @@ public class ScenarioIntegrationTest {
                         .value(Matchers.is("return true")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error").isEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.failure").isNotEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isEmpty())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("$.variables").isEmpty()).andReturn()
+                .getResponse().getContentAsString();
 
         Scenario created = new ObjectMapper().readValue(responseString, Scenario.class);
 
@@ -189,6 +190,31 @@ public class ScenarioIntegrationTest {
 
         // Confirm both created and queried are equal
         assertThat(created, equalTo(queried));
+
+    }
+
+    @Test
+    public void testUpdateScenario() throws Exception {
+
+        ScenarioRequest request = Fixture.from(ScenarioRequest.class).gimme("valid");
+        String requestString = new ObjectMapper().writeValueAsString(request);
+
+        Scenario created = new ObjectMapper().readValue(this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString(), Scenario.class);
+
+        Scenario updated = new ObjectMapper().readValue(this.mockMvc
+                .perform(MockMvcRequestBuilders.post("/scenario").content(requestString)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString(), Scenario.class);
+
+        assertThat(created.getScenarioId(), not(equalTo(updated.getScenarioId())));
+        assertThat(EqualsBuilder.reflectionEquals(created, updated, new String[]{"scenarioId"}), equalTo(true));
 
     }
 
