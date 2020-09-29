@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = MockServiceApplication.class,
         properties = {"camunda.engine.url=http://localhost:8888/engine-rest"},
         args = "--scenariosFolder=src/test/resources/scenarios")
-@Transactional
 public class LoadScenariosRunnerTest {
 
     @Rule
@@ -41,6 +40,6 @@ public class LoadScenariosRunnerTest {
         List<Scenario> scenarios = queryUC.queryScenarios(topicName);
 
         assertThat(scenarios.stream().filter(s -> topicName.equals(s.getTopicName()))
-                .collect(Collectors.toList()), hasSize(1));
+                .collect(Collectors.toList()), hasSize(3));
     }
 }
