@@ -2,6 +2,7 @@ package com.github.ricardocomar.camunda.mockservice.handler.helper;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.github.ricardocomar.camunda.mockservice.handler.exception.ServiceFailureException;
@@ -15,10 +16,17 @@ public class ScenarioHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioHelper.class);
 
-    private final ScriptHelper scriptHelper = new ScriptHelper();
+    private ScenarioHelper() {
+    }
 
-    public Scenario extractScenario(ExternalTask externalTask, String topicName,
+    public static Scenario extractScenario(ExternalTask externalTask, String topicName,
             List<Scenario> scenarios) throws ServiceFailureException {
+
+        Optional.ofNullable(scenarios)
+                .orElseThrow(() -> new ServiceFailureException(
+                        "Empty scenario list for topic " + topicName, "SCENARIO_ABSENT",
+                        "Empty scenario list for topic " + topicName, 0, 0L));
+
         scenarios.stream().findFirst()
                 .orElseThrow(() -> new ServiceFailureException(
                         "No Scenario found in database for topic " + topicName, "SCENARIO_ABSENT",
@@ -40,9 +48,9 @@ public class ScenarioHelper {
         return scenario;
     }
 
-    public boolean handleCondition(ExternalTask externalTask, Condition condition) {
+    public static boolean handleCondition(ExternalTask externalTask, Condition condition) {
         try {
-            return (Boolean) scriptHelper.evalScript(condition.getConditionScript(),
+            return (Boolean) ScriptHelper.evalScript(condition.getConditionScript(),
                     externalTask.getAllVariables());
 
         } catch (Exception e) {

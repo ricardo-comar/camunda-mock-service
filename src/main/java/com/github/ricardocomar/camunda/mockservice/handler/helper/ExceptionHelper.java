@@ -3,12 +3,14 @@ package com.github.ricardocomar.camunda.mockservice.handler.helper;
 import java.util.Optional;
 import com.github.ricardocomar.camunda.mockservice.handler.exception.ServiceErrorException;
 import com.github.ricardocomar.camunda.mockservice.handler.exception.ServiceFailureException;
-import com.github.ricardocomar.camunda.mockservice.model.Failure;
+import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
 import com.github.ricardocomar.camunda.mockservice.model.ScenarioError;
 
 public class ExceptionHelper {
 
-    public final void handlerFailure(Failure failure) throws ServiceFailureException {
+    private ExceptionHelper() {}
+
+    public static final void handlerFailure(ScenarioFailure failure) throws ServiceFailureException {
         if (failure != null) {
             throw new ServiceFailureException("Scenario with expected failure",
                     failure.getMessage(), failure.getDetails(),
@@ -17,7 +19,7 @@ public class ExceptionHelper {
         }
     }
 
-    public final void handlerError(ScenarioError error) throws ServiceErrorException {
+    public static final void handlerError(ScenarioError error) throws ServiceErrorException {
         if (error != null) {
             throw new ServiceErrorException("Scenario with expected failure",
                     error.getErrorCode(), error.getErrorMessage());

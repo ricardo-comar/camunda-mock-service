@@ -8,7 +8,7 @@ public class FailureFixture implements TemplateLoader {
 
     @Override
     public void load() {
-        Fixture.of(Failure.class).addTemplate("valid", new Rule() {
+        Fixture.of(ScenarioFailure.class).addTemplate("valid", new Rule() {
             {
                 add("message", "FAILURE_FIXTURE");
                 add("details", "Expected Failure");
