@@ -6,6 +6,7 @@ import static br.com.fluentvalidator.predicate.LogicalPredicate.not;
 import static br.com.fluentvalidator.predicate.ObjectPredicate.nullValue;
 import static br.com.fluentvalidator.predicate.StringPredicate.stringEmptyOrNull;
 import java.util.Optional;
+import java.util.stream.Stream;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,9 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
     @Autowired
     private FailureValidator failureValidator;
 
+    @Autowired
+    private ErrorValidator errorValidator;
+
     @Override
     public void rules() {
 
@@ -47,18 +51,24 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
         ruleFor("failure", Scenario::getFailure).whenever(not(nullValue()))
                 .withValidator(failureValidator).critical();
 
+        ruleFor("failure", Scenario::getError).whenever(not(nullValue()))
+                .withValidator(errorValidator).critical();
+
         ruleForEach("variables", Scenario::getVariables).must(not(empty()))
                 .withMessage("Variables is mandatory").whenever(not(nullValue()))
                 .withValidator(varValidator).critical();
 
-        ruleFor("composition", s -> s).must(this::checkCombination) //TODO: Eval to fluent validator XOR
-                .withMessage(
-                        "Composition (failure, variables) is invalid, just one of them at one time")
+        // TODO: Eval to fluent validator XOR
+        ruleFor("composition", s -> s).must(this::checkCombination).withMessage(
+                "Composition (failure, error, variables) is invalid, just one of them at one time")
                 .critical();
     }
 
     private boolean checkCombination(Scenario scenario) {
-        return Optional.ofNullable(scenario.getFailure()).isPresent()
-                ^ Optional.ofNullable(scenario.getVariables()).isPresent();
+        return Stream
+                .of(Optional.ofNullable(scenario.getFailure()).isPresent(),
+                        Optional.ofNullable(scenario.getError()).isPresent(),
+                        Optional.ofNullable(scenario.getVariables()).isPresent())
+                .filter(b -> b).count() == 1;
     }
 }
