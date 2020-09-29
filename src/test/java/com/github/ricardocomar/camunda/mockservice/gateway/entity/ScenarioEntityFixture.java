@@ -29,6 +29,12 @@ public class ScenarioEntityFixture implements TemplateLoader {
                 add("variables", null);
             }
         });
+        Fixture.of(ScenarioEntity.class).addTemplate("valid-error").inherits("valid", new Rule() {
+            {
+                add("error", one(ErrorEmbeddable.class, "valid"));
+                add("variables", null);
+            }
+        });
 
     }
 

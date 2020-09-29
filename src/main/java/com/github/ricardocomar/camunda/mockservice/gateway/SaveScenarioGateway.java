@@ -26,8 +26,6 @@ public class SaveScenarioGateway {
         Optional.ofNullable(entity.getVariables())
                 .ifPresent(l -> l.forEach(v -> v.setScenario(entity)));
 
-        ;
-
         return mapper.fromEntity(repository.saveAndFlush(entity));
     }
 }
