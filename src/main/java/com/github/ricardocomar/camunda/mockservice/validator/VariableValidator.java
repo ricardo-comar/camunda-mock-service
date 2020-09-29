@@ -17,7 +17,7 @@ public class VariableValidator extends AbstractValidator<Variable> {
         ruleFor(root -> root).must(not(stringEmptyOrNull(Variable::getName)))
                 .withMessage("Variable Name is mandatory").critical();
 
-        ruleFor(root -> root)
+        ruleFor(root -> root) //TODO: Eval to fluent validator XOR
                 // XOR = ((A && notB) || (notA && B))
                 .must(stringEmptyOrNull(Variable::getClassName)
                         .and(stringEmptyOrNull(Variable::getValue))
