@@ -19,6 +19,8 @@ public class ScenarioRequest {
     private DelayRequest delay;
 
     private FailureRequest failure;
+
+    private ErrorRequest error;
     
     private List<VariableRequest> variables;
 

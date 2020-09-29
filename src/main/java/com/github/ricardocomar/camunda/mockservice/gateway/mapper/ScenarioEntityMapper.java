@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {VariableEntityMapper.class, ConditionEntityMapper.class,
-        DelayEmbeddableMapper.class, FailureEmbeddableMapper.class})
+        DelayEmbeddableMapper.class, FailureEmbeddableMapper.class, ErrorEmbeddableMapper.class})
 public abstract class ScenarioEntityMapper {
 
     public abstract Scenario fromEntity(ScenarioEntity entity);

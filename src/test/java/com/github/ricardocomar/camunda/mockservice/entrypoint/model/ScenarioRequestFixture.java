@@ -25,6 +25,13 @@ public class ScenarioRequestFixture implements TemplateLoader {
                 add("variables", null);
             }
         });
+        
+        Fixture.of(ScenarioRequest.class).addTemplate("valid-error").inherits("valid", new Rule() {
+            {
+                add("error", one(ErrorRequest.class, "valid"));
+                add("variables", null);
+            }
+        });
 
     }
 

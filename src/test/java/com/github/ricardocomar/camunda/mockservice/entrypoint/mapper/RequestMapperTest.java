@@ -32,6 +32,9 @@ public class RequestMapperTest {
     @Spy
     FailureRequestMapper failureRequestMapper = new FailureRequestMapperImpl();
 
+    @Spy
+    ErrorRequestMapper errorRequestMapper = new ErrorRequestMapperImpl();
+
     public RequestMapperTest() {
         FixtureFactoryLoader.loadTemplates(MockServiceApplication.class.getPackage().getName());
     }
@@ -43,6 +46,9 @@ public class RequestMapperTest {
 
         assertThat(Fixture.from(Scenario.class).gimme("valid-failure"),
                 equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid-failure"))));
+
+        assertThat(Fixture.from(Scenario.class).gimme("valid-error"),
+                equalTo(mapper.fromRequest(Fixture.from(ScenarioRequest.class).gimme("valid-error"))));
     }
 
 }

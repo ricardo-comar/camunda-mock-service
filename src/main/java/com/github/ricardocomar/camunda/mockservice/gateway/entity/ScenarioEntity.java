@@ -45,6 +45,11 @@ public class ScenarioEntity {
     @AttributeOverride(name = "retryTimeout", column = @Column(name = "failure_retryTimeout"))
     private FailureEmbeddable failure;
 
+    @Embedded
+    @AttributeOverride(name = "errorCode", column = @Column(name = "error_code"))
+    @AttributeOverride(name = "errorMessage", column = @Column(name = "error_message"))
+    private ErrorEmbeddable error;
+
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ConditionEntity condition;
 
