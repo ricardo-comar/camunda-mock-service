@@ -4,9 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import java.util.Collections;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
+import com.github.ricardocomar.camunda.mockservice.model.Failure;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
+import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.validator.ConditionValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.DelayValidator;
+import com.github.ricardocomar.camunda.mockservice.validator.FailureValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.ScenarioValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.VariableValidator;
 import org.junit.Test;
@@ -32,6 +35,9 @@ public class ScenarioValidatorTest {
     @Spy
     private DelayValidator delayValidator = new  DelayValidator();
 
+    @Spy
+    private FailureValidator failureValidator = new FailureValidator();
+
     private Scenario scenario;
 
     public ScenarioValidatorTest() {
@@ -46,7 +52,7 @@ public class ScenarioValidatorTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void testMandatory() {
 
         scenario  = Fixture.from(Scenario.class).gimme("valid");
         scenario.setTopicName(null);
@@ -70,5 +76,16 @@ public class ScenarioValidatorTest {
 
     }
 
+    @Test
+    public void testInvalidCombination() {
 
+        scenario  = Fixture.from(Scenario.class).gimme("valid");
+        scenario.setVariables(Fixture.from(Variable.class).gimme(2, "script", "string"));
+        scenario.setFailure(Fixture.from(Failure.class).gimme("valid"));
+        assertThat(validator.validate(scenario).isValid(), is(false));
+
+        scenario.setVariables(null);
+        scenario.setFailure(null);
+        assertThat(validator.validate(scenario).isValid(), is(false));
+    }
 }

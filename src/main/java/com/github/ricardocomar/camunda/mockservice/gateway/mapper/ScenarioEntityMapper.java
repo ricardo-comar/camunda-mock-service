@@ -1,5 +1,6 @@
 package com.github.ricardocomar.camunda.mockservice.gateway.mapper;
 
+import java.util.Optional;
 import com.github.ricardocomar.camunda.mockservice.gateway.entity.ScenarioEntity;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import org.mapstruct.AfterMapping;
@@ -16,6 +17,7 @@ public abstract class ScenarioEntityMapper {
 
     @AfterMapping
     protected void enrichCycleReference(@MappingTarget ScenarioEntity entity) {
-        entity.getVariables().stream().forEach(v -> v.setScenario(entity));
+        Optional.ofNullable(entity.getVariables())
+                .ifPresent(vars -> vars.stream().forEach(v -> v.setScenario(entity)));
     }
 }
