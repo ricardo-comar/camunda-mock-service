@@ -54,7 +54,7 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
         ruleFor("failure", Scenario::getError).whenever(not(nullValue()))
                 .withValidator(errorValidator).critical();
 
-        ruleForEach("variables", Scenario::getVariables).must(not(empty()))
+        ruleForEach("variables", Scenario::getVariables).must(not(empty())).when(not(nullValue()))
                 .withMessage("Variables is mandatory").whenever(not(nullValue()))
                 .withValidator(varValidator).critical();
 
@@ -66,9 +66,9 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
 
     private boolean checkCombination(Scenario scenario) {
         return Stream
-                .of(Optional.ofNullable(scenario.getFailure()).isPresent(),
-                        Optional.ofNullable(scenario.getError()).isPresent(),
-                        Optional.ofNullable(scenario.getVariables()).isPresent())
-                .filter(b -> b).count() == 1;
+                .of(Optional.ofNullable(scenario.getFailure()),
+                        Optional.ofNullable(scenario.getError()),
+                        Optional.ofNullable(scenario.getVariables()))
+                .filter(o -> o.isPresent()).count() == 1;
     }
 }
