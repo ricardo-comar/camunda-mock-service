@@ -5,6 +5,7 @@ import static br.com.fluentvalidator.predicate.ComparablePredicate.greaterThanOr
 import static br.com.fluentvalidator.predicate.LogicalPredicate.not;
 import static br.com.fluentvalidator.predicate.ObjectPredicate.nullValue;
 import static br.com.fluentvalidator.predicate.StringPredicate.stringEmptyOrNull;
+import java.util.Optional;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,9 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
     @Autowired
     private DelayValidator delayValidator;
 
+    @Autowired
+    private FailureValidator failureValidator;
+
     @Override
     public void rules() {
 
@@ -40,9 +44,21 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
         ruleFor("delay", Scenario::getDelay).whenever(not(nullValue()))
                 .withValidator(delayValidator).critical();
 
+        ruleFor("failure", Scenario::getFailure).whenever(not(nullValue()))
+                .withValidator(failureValidator).critical();
+
         ruleForEach("variables", Scenario::getVariables).must(not(empty()))
                 .withMessage("Variables is mandatory").whenever(not(nullValue()))
                 .withValidator(varValidator).critical();
 
+        ruleFor("composition", s -> s).must(this::checkCombination)
+                .withMessage(
+                        "Composition (failure, variables) is invalid, just one of them at one time")
+                .critical();
+    }
+
+    private boolean checkCombination(Scenario scenario) {
+        return Optional.ofNullable(scenario.getFailure()).isPresent()
+                ^ Optional.ofNullable(scenario.getVariables()).isPresent();
     }
 }

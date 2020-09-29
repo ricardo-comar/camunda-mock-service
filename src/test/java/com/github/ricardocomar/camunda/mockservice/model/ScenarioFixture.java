@@ -29,6 +29,7 @@ public class ScenarioFixture implements TemplateLoader {
         Fixture.of(Scenario.class).addTemplate("valid-failure").inherits("valid", new Rule() {
             {
                 add("failure", one(Failure.class, "valid"));
+                add("variables", null);
             }
         });
 
