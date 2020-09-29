@@ -33,6 +33,10 @@ Each scenario has a structure based on **condition**, **priority** and **variabl
       "retryTimes": 3, // Number of retries 
       "retryTimeout": 200 // Retry Timeout 
   },
+  "error": { // Optional expected BPMN Error, to be handled by the camunda client
+      "errorCode": "CUSTOM_KEY", // Code to expected error
+      "errorMessage": "Expected Failure" // Message details to expected error
+  },
   "variables": [ // List of variables to be saved/updated on message
     {
       "name": "messageApproved", // Variable name
@@ -44,7 +48,9 @@ Each scenario has a structure based on **condition**, **priority** and **variabl
 }
 ```
 #### Rules
-- One scenario **must** define _topicName_, _priority_, _condition_ and 1+ _variables_.
+- One successful scenario **must** define _topicName_, _priority_, _condition_ and 1+ _variables_.
+- One error scenario **must** define _topicName_, _priority_, _condition_ and _error_.
+- One failure scenario **must** define _topicName_, _priority_, _condition_ and _failure_.
 - You cannot define two scenarios with the same _topicName_ and _priority_. 
 - _conditionScript_ **must return boolean**, and you can use message variables to define that.
 - _groovyScript_ **must return something**, including _null_.
