@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import java.util.Collections;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
-import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
+import com.github.ricardocomar.camunda.mockservice.model.ScenarioError;
+import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
 import com.github.ricardocomar.camunda.mockservice.validator.ConditionValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.DelayValidator;
+import com.github.ricardocomar.camunda.mockservice.validator.ErrorValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.FailureValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.ScenarioValidator;
 import com.github.ricardocomar.camunda.mockservice.validator.VariableValidator;
@@ -37,6 +39,9 @@ public class ScenarioValidatorTest {
 
     @Spy
     private FailureValidator failureValidator = new FailureValidator();
+
+    @Spy
+    private ErrorValidator errorValidator = new ErrorValidator();
 
     private Scenario scenario;
 
@@ -82,10 +87,27 @@ public class ScenarioValidatorTest {
         scenario  = Fixture.from(Scenario.class).gimme("valid");
         scenario.setVariables(Fixture.from(Variable.class).gimme(2, "script", "string"));
         scenario.setFailure(Fixture.from(ScenarioFailure.class).gimme("valid"));
+        scenario.setError(Fixture.from(ScenarioError.class).gimme("valid"));
         assertThat(validator.validate(scenario).isValid(), is(false));
 
         scenario.setVariables(null);
         scenario.setFailure(null);
+        scenario.setError(null);
+        assertThat(validator.validate(scenario).isValid(), is(false));
+
+        scenario.setVariables(null);
+        scenario.setFailure(Fixture.from(ScenarioFailure.class).gimme("valid"));
+        scenario.setError(Fixture.from(ScenarioError.class).gimme("valid"));
+        assertThat(validator.validate(scenario).isValid(), is(false));
+
+        scenario.setVariables(Fixture.from(Variable.class).gimme(2, "script", "string"));
+        scenario.setFailure(Fixture.from(ScenarioFailure.class).gimme("valid"));
+        scenario.setError(null);
+        assertThat(validator.validate(scenario).isValid(), is(false));
+
+        scenario.setVariables(Fixture.from(Variable.class).gimme(2, "script", "string"));
+        scenario.setFailure(null);
+        scenario.setError(Fixture.from(ScenarioError.class).gimme("valid"));
         assertThat(validator.validate(scenario).isValid(), is(false));
     }
 }
