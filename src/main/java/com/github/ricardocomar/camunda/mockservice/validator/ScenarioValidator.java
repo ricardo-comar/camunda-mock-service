@@ -51,7 +51,7 @@ public class ScenarioValidator extends AbstractValidator<Scenario> {
                 .withMessage("Variables is mandatory").whenever(not(nullValue()))
                 .withValidator(varValidator).critical();
 
-        ruleFor("composition", s -> s).must(this::checkCombination)
+        ruleFor("composition", s -> s).must(this::checkCombination) //TODO: Eval to fluent validator XOR
                 .withMessage(
                         "Composition (failure, variables) is invalid, just one of them at one time")
                 .critical();
