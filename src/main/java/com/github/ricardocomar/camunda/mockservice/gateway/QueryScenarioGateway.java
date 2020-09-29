@@ -19,7 +19,7 @@ public class QueryScenarioGateway {
     @Autowired
     private ScenarioEntityMapper mapper;
 
-    public Optional<Scenario> query(String topicName, String scenarioId) {
+    public Optional<Scenario> get(String scenarioId) {
 
         Optional<ScenarioEntity> scenario = repository.findById(scenarioId);
         return scenario.map(e -> Optional.of(mapper.fromEntity(e)).orElse(null));

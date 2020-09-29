@@ -17,8 +17,8 @@ public class QueryScenarioUseCase {
         return gateway.query(topicName, priority);
     }
 
-    public Optional<Scenario> queryScenario(String topicName, String scenarioId) {
-        return gateway.query(topicName, scenarioId);
+    public Optional<Scenario> queryScenario(String scenarioId) {
+        return gateway.get(scenarioId);
     }
     
     public List<Scenario> queryScenarios(String topicName) {

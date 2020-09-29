@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.usecase.QueryScenarioUseCase;
