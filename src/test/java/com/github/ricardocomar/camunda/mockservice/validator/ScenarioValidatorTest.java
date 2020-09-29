@@ -1,4 +1,4 @@
-package com.github.ricardocomar.camunda.validator;
+package com.github.ricardocomar.camunda.mockservice.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -8,12 +8,6 @@ import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import com.github.ricardocomar.camunda.mockservice.model.ScenarioError;
 import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
-import com.github.ricardocomar.camunda.mockservice.validator.ConditionValidator;
-import com.github.ricardocomar.camunda.mockservice.validator.DelayValidator;
-import com.github.ricardocomar.camunda.mockservice.validator.ErrorValidator;
-import com.github.ricardocomar.camunda.mockservice.validator.FailureValidator;
-import com.github.ricardocomar.camunda.mockservice.validator.ScenarioValidator;
-import com.github.ricardocomar.camunda.mockservice.validator.VariableValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

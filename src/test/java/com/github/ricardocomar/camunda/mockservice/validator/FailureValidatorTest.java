@@ -1,10 +1,9 @@
-package com.github.ricardocomar.camunda.validator;
+package com.github.ricardocomar.camunda.mockservice.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.model.ScenarioFailure;
-import com.github.ricardocomar.camunda.mockservice.validator.FailureValidator;
 import org.junit.Test;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;

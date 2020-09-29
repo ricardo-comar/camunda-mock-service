@@ -1,10 +1,8 @@
-package com.github.ricardocomar.camunda.validator;
+package com.github.ricardocomar.camunda.mockservice.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import com.github.ricardocomar.camunda.mockservice.model.Delay;
-import com.github.ricardocomar.camunda.mockservice.validator.DelayValidationException;
-import com.github.ricardocomar.camunda.mockservice.validator.DelayValidator;
 import org.junit.Test;
 import br.com.fluentvalidator.exception.ValidationException;
 

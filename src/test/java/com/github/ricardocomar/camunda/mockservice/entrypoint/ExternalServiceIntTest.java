@@ -2,10 +2,8 @@ package com.github.ricardocomar.camunda.mockservice.entrypoint;
 
 import javax.transaction.Transactional;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +19,14 @@ import org.springframework.web.context.WebApplicationContext;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 @RunWith(SpringRunner.class)
-@DirtiesContext
+// @DirtiesContext
 @SpringBootTest(classes = MockServiceApplication.class,
         properties = {"camunda.engine.url=http://localhost:8888/engine-rest"})
 @Transactional
-public class ExternalServiceIntegrationTest {
+public class ExternalServiceIntTest {
 
     @Autowired
     private WebApplicationContext wac;
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8888);
 
     private MockMvc mockMvc;
 

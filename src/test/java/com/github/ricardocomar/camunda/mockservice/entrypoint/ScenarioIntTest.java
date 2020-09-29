@@ -29,9 +29,9 @@ import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 @RunWith(SpringRunner.class)
-@DirtiesContext
+// @DirtiesContext
 @SpringBootTest(classes = MockServiceApplication.class)
-public class ScenarioIntegrationTest {
+public class ScenarioIntTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
