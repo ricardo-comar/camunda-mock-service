@@ -226,6 +226,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- The following enables the "thin jar" deployment option. 
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot.experimental</groupId>
+                        <artifactId>spring-boot-thin-layout</artifactId>
+                        <version>1.0.25.RELEASE</version>
+                    </dependency>
+                </dependencies>                
+                -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
