@@ -12,9 +12,24 @@ public class ScenarioRequestFixture implements TemplateLoader {
             {
                 add("topicName", "mockTopic");
                 add("condition", one(ConditionRequest.class, "valid"));
+                add("delay", one(DelayRequest.class, "valid-fixed"));
                 add("priority", 1);
                 add("variables",
                         has(4).of(VariableRequest.class, "boolean", "string", "long", "script"));
+            }
+        });
+
+        Fixture.of(ScenarioRequest.class).addTemplate("valid-failure").inherits("valid", new Rule() {
+            {
+                add("failure", one(FailureRequest.class, "valid"));
+                add("variables", null);
+            }
+        });
+        
+        Fixture.of(ScenarioRequest.class).addTemplate("valid-error").inherits("valid", new Rule() {
+            {
+                add("error", one(ErrorRequest.class, "valid"));
+                add("variables", null);
             }
         });
 

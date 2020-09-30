@@ -8,13 +8,35 @@ public class ScenarioFixture implements TemplateLoader {
 
     @Override
     public void load() {
+
         Fixture.of(Scenario.class).addTemplate("valid", new Rule() {
             {
-                add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
                 add("priority", 1);
+                add("delay", one(Delay.class, "valid-fixed"));
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(4).of(Variable.class, "boolean", "string", "long", "script"));
+            }
+        });
+
+        Fixture.of(Scenario.class).addTemplate("valid-saved").inherits("valid", new Rule() {
+            {
+                add("scenarioId", "mockScenario");
+            }
+        });
+
+
+        Fixture.of(Scenario.class).addTemplate("valid-failure").inherits("valid", new Rule() {
+            {
+                add("failure", one(ScenarioFailure.class, "valid"));
+                add("variables", null);
+            }
+        });
+
+        Fixture.of(Scenario.class).addTemplate("valid-error").inherits("valid", new Rule() {
+            {
+                add("error", one(ScenarioError.class, "valid"));
+                add("variables", null);
             }
         });
 
@@ -23,6 +45,7 @@ public class ScenarioFixture implements TemplateLoader {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
                 add("priority", 1);
+                add("delay", one(Delay.class, "valid-fixed"));
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(1).of(Variable.class, "long"));
             }
@@ -33,6 +56,7 @@ public class ScenarioFixture implements TemplateLoader {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
                 add("priority", 2);
+                add("delay", one(Delay.class, "valid-fixed"));
                 add("condition", one(Condition.class, "valid"));
                 add("variables", has(1).of(Variable.class, "script"));
             }
@@ -43,6 +67,7 @@ public class ScenarioFixture implements TemplateLoader {
                 add("scenarioId", "mockScenario");
                 add("topicName", "mockTopic");
                 add("priority", 2);
+                add("delay", one(Delay.class, "valid-fixed"));
                 add("condition", one(Condition.class, "valid-false"));
                 add("variables", has(1).of(Variable.class, "script"));
             }

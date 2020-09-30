@@ -1,4 +1,4 @@
-package com.github.ricardocomar.camunda.validator;
+package com.github.ricardocomar.camunda.mockservice.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;

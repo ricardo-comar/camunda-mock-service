@@ -1,5 +1,6 @@
 package com.github.ricardocomar.camunda.mockservice.gateway;
 
+import java.util.Optional;
 import java.util.UUID;
 import com.github.ricardocomar.camunda.mockservice.gateway.entity.ScenarioEntity;
 import com.github.ricardocomar.camunda.mockservice.gateway.mapper.ScenarioEntityMapper;
@@ -21,9 +22,10 @@ public class SaveScenarioGateway {
 
         ScenarioEntity entity = mapper.fromModel(model);
         entity.setScenarioId(UUID.randomUUID().toString());
-        
-        entity.getVariables().forEach(v -> v.setScenario(entity));
-        
+
+        Optional.ofNullable(entity.getVariables())
+                .ifPresent(l -> l.forEach(v -> v.setScenario(entity)));
+
         return mapper.fromEntity(repository.saveAndFlush(entity));
     }
 }

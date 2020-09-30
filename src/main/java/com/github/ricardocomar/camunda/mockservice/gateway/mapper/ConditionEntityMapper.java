@@ -9,4 +9,6 @@ public interface ConditionEntityMapper {
 
     public Condition fromEntity(ConditionEntity entity);
 
+    public ConditionEntity fromModel(Condition model);
+
 }

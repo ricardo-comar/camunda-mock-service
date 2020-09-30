@@ -22,6 +22,21 @@ Each scenario has a structure based on **condition**, **priority** and **variabl
   "condition": { // Condition to be executed
       "conditionScript": "return true" // Groovy script
   },
+  "delay": { // Optional delay, can be fixed or ranged (min + max)
+      "fixedMs": 100, // fixed milisseconds
+      "minMs": 50, // minimum milisseconds wait time
+      "maxMs": 200 // maximum milisseconds wait time
+  },
+  "failure": { // Optional expected failure, to be handled by the camunda client
+      "message": "CUSTOM_KEY", // Message to expected failure
+      "details": "Expected Failure", // Message details to expected failure
+      "retryTimes": 3, // Number of retries 
+      "retryTimeout": 200 // Retry Timeout 
+  },
+  "error": { // Optional expected BPMN Error, to be handled by the camunda client
+      "errorCode": "CUSTOM_KEY", // Code to expected error
+      "errorMessage": "Expected Failure" // Message details to expected error
+  },
   "variables": [ // List of variables to be saved/updated on message
     {
       "name": "messageApproved", // Variable name
@@ -33,11 +48,14 @@ Each scenario has a structure based on **condition**, **priority** and **variabl
 }
 ```
 #### Rules
-- One scenario **must** define _topicName_, _priority_, _condition_ and 1+ _variables_.
+- One successful scenario **must** define _topicName_, _priority_, _condition_ and 1+ _variables_.
+- One error scenario **must** define _topicName_, _priority_, _condition_ and _error_.
+- One failure scenario **must** define _topicName_, _priority_, _condition_ and _failure_.
 - You cannot define two scenarios with the same _topicName_ and _priority_. 
 - _conditionScript_ **must return boolean**, and you can use message variables to define that.
 - _groovyScript_ **must return something**, including _null_.
 - A _variable_ must be defined with (_className_ **and** _value_) **OR** (_groovyScript_). Neither none of them.
+- A _delay_ is optional, but must be defined with (_minMx_ **and** _maxMs_) **OR** (_fixedMs_). Neither none of them.
 
 
 #### Scenario Matching

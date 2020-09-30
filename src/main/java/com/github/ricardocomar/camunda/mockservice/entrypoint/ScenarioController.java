@@ -57,13 +57,12 @@ public class ScenarioController {
 
     }
 
-    @GetMapping(path = "/scenario/{topic}/{scenarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> queryScenario(@PathVariable final String topic,
-            @PathVariable final String scenarioId) {
+    @GetMapping(path = "/scenario/{scenarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> queryScenario(@PathVariable final String scenarioId) {
 
-        Optional<Scenario> scenario = queryScenario.queryScenario(topic, scenarioId);
+        Optional<Scenario> scenario = queryScenario.queryScenario(scenarioId);
         if (scenario.isEmpty()) {
-            LOGGER.warn("Scenario {} for topic {} not found", scenarioId, topic);
+            LOGGER.warn("Scenario {} not found", scenarioId);
             return ResponseEntity.badRequest().build();
         }
 
@@ -71,13 +70,12 @@ public class ScenarioController {
 
     }
 
-    @DeleteMapping(path = "/scenario/{topic}/{scenarioId}")
-    public ResponseEntity<?> deleteScenario(@PathVariable final String topic,
-            @PathVariable final String scenarioId) {
+    @DeleteMapping(path = "/scenario/{scenarioId}")
+    public ResponseEntity<?> deleteScenario(@PathVariable final String scenarioId) {
 
-        Optional<Scenario> scenario = queryScenario.queryScenario(topic, scenarioId);
+        Optional<Scenario> scenario = queryScenario.queryScenario(scenarioId);
         if (scenario.isEmpty()) {
-            LOGGER.warn("Scenario {} for topic {} not found", scenarioId, topic);
+            LOGGER.warn("Scenario {} not found", scenarioId);
             return ResponseEntity.badRequest().build();
         }
 

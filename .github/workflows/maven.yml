@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: 1.11
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B verify package --file pom.xml
     - name: Upload coverage to Codecov  
       uses: codecov/codecov-action@v1
       with:

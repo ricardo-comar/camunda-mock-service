@@ -1,41 +1,69 @@
 package com.github.ricardocomar.camunda.mockservice.gateway.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToObject;
 import com.github.ricardocomar.camunda.mockservice.MockServiceApplication;
 import com.github.ricardocomar.camunda.mockservice.gateway.entity.ScenarioEntity;
 import com.github.ricardocomar.camunda.mockservice.model.Scenario;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class EntityMapperTest {
 
+    @InjectMocks
     ScenarioEntityMapper mapper = new ScenarioEntityMapperImpl();
-    private final Scenario model;
-    private final ScenarioEntity entity;
+
+    @Spy
+    VariableEntityMapper variableEntityMapper = new VariableEntityMapperImpl();
+
+    @Spy
+    ConditionEntityMapper conditionEntityMapper = new ConditionEntityMapperImpl();
+
+    @Spy
+    DelayEmbeddableMapper delayEmbeddableMapper = new DelayEmbeddableMapperImpl();
+
+    @Spy
+    FailureEmbeddableMapper failureEmbeddableMapper = new FailureEmbeddableMapperImpl();
+
+    @Spy
+    ErrorEmbeddableMapper errorEmbeddableMapper = new ErrorEmbeddableMapperImpl();
 
     public EntityMapperTest() {
         FixtureFactoryLoader.loadTemplates(MockServiceApplication.class.getPackage().getName());
-        ReflectionTestUtils.setField(mapper, "variableEntityMapper",
-                new VariableEntityMapperImpl());
-        ReflectionTestUtils.setField(mapper, "conditionEntityMapper",
-                new ConditionEntityMapperImpl());
-
-        model = Fixture.from(Scenario.class).gimme("valid");
-        entity = Fixture.from(ScenarioEntity.class).gimme("valid");
     }
 
     @Test
     public void testModelToEntity() {
-        assertThat(model, equalTo(mapper.fromEntity(entity)));
+
+        assertThat(Fixture.from(ScenarioEntity.class).gimme("valid-saved"), equalToObject(
+                mapper.fromModel(Fixture.from(Scenario.class).gimme("valid-saved"))));
+
+        assertThat(Fixture.from(ScenarioEntity.class).gimme("valid-failure"), equalToObject(
+                mapper.fromModel(Fixture.from(Scenario.class).gimme("valid-failure"))));
+
+        assertThat(Fixture.from(ScenarioEntity.class).gimme("valid-error"), equalToObject(
+                mapper.fromModel(Fixture.from(Scenario.class).gimme("valid-error"))));
+
     }
 
     @Test
     public void testEntityToModel() {
-        assertThat(model, equalTo(mapper.fromEntity(entity)));
+
+        assertThat(Fixture.from(Scenario.class).gimme("valid-saved"), equalToObject(
+                mapper.fromEntity(Fixture.from(ScenarioEntity.class).gimme("valid-saved"))));
+
+        assertThat(Fixture.from(Scenario.class).gimme("valid-failure"), equalToObject(
+                mapper.fromEntity(Fixture.from(ScenarioEntity.class).gimme("valid-failure"))));
+
+        assertThat(Fixture.from(Scenario.class).gimme("valid-error"), equalToObject(
+                mapper.fromEntity(Fixture.from(ScenarioEntity.class).gimme("valid-error"))));
     }
 
 }
