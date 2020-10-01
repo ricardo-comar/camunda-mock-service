@@ -2,10 +2,9 @@ package com.github.ricardocomar.camunda.mockservice.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import com.github.ricardocomar.camunda.mockservice.model.Variable;
-import com.github.ricardocomar.camunda.mockservice.validator.VariableValidator;
-import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 import br.com.fluentvalidator.context.ValidationResult;
 
