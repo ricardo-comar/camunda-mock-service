@@ -1,0 +1,14 @@
+{
+  "topicName": "cardValidation",
+  "priority": 10,
+  "condition": {
+      "conditionScript": "return true"
+  },
+  "variables": [
+    {
+      "className": "java.lang.Boolean",
+      "name": "cardValid",
+      "value": "true"
+    }
+  ]
+}

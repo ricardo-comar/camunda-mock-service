@@ -1,0 +1,18 @@
+{
+  "id" : "4d82eac9-9503-4b3a-86f3-59c96709b2a8",
+  "name" : "engine-rest_external-task_fetchandlock",
+  "request" : {
+    "url" : "/engine-rest/external-task/fetchAndLock",
+    "method" : "POST"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[]",
+    "headers" : {
+      "Content-Type" : "application/json",
+      "Transfer-Encoding" : "chunked",
+      "Date" : "Tue, 22 Sep 2020 02:50:15 GMT"
+    }
+  },
+  "uuid" : "4d82eac9-9503-4b3a-86f3-59c96709b2a8"
+}

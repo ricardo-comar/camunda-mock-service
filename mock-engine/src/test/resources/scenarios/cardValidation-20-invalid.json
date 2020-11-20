@@ -1,0 +1,7 @@
+{
+  "topicName": "cardValidation",
+  "priority": 20,
+  "condition": {
+      "conditionScript": "return true"
+  }
+}

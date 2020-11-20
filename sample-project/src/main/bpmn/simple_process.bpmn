@@ -16,15 +16,15 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Simple_Process">
+      <bpmndi:BPMNEdge id="Flow_1t8dmu2_di" bpmnElement="Flow_1t8dmu2">
+        <di:waypoint x="500" y="117" />
+        <di:waypoint x="662" y="117" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0tef3kv_di" bpmnElement="Flow_0tef3kv">
         <di:waypoint x="215" y="117" />
         <di:waypoint x="338" y="117" />
         <di:waypoint x="338" y="130" />
         <di:waypoint x="400" y="130" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1t8dmu2_di" bpmnElement="Flow_1t8dmu2">
-        <di:waypoint x="500" y="117" />
-        <di:waypoint x="662" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />

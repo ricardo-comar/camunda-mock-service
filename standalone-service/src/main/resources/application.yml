@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: mock-service
+  cloud:
+    discovery:
+      enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+
+  jpa:
+    hibernate.ddl-auto: update
+
+server:
+  port: 8099
+
+camunda:
+  engine:
+    url:  http://localhost/engine-rest

@@ -1,0 +1,16 @@
+{
+  "topicName": "cardValidation",
+  "priority": 15,
+  "condition": {
+      "conditionScript": "return true"
+  },
+  "delay": {
+      "fixedMs": 100
+  },
+  "failure": { 
+      "message": "CUSTOM_KEY", 
+      "details": "Expected Failure", 
+      "retryTimes": 3, 
+      "retryTimeout": 200 
+  }
+}
