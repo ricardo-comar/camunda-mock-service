@@ -34,7 +34,7 @@ services:
       - ./target/database/:/var/lib/postgresql/data/
      
   camunda:
-    image: camunda/camunda-bpm-platform:7.11.0
+    image: camunda/camunda-bpm-platform:7.14.0
     restart: on-failure
     ports:
      - "80:8080"

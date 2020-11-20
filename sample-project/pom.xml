@@ -43,7 +43,7 @@
                 <executions>
                 <execution>
                     <goals>
-                    <goal>testCompile</goal>
+                        <goal>testCompile</goal>
                     </goals>
                     <configuration>
                         <jvmArgs>
@@ -65,9 +65,15 @@
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>${gatling-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-            <!--
-
             <plugin>
                 <groupId>com.github.ricardo-comar.spring-boot-camunda</groupId>
                 <artifactId>camunda-mock-service-maven-plugin</artifactId>
@@ -80,7 +86,6 @@
                     </execution>
                 </executions>                
             </plugin>
-            -->
 		</plugins>
 	</build>
 </project>
