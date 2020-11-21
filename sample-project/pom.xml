@@ -74,25 +74,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.github.ricardo-comar.spring-boot-camunda</groupId>
-                <artifactId>camunda-mock-service-maven-plugin</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
-                <executions>    
-                    <execution>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>camunda-mock-service</goal>
-                        </goals>
-                    </execution>
-                </executions>                
-            </plugin>
-
-
-
-
-
-
             <plugin>       
                 <groupId>com.dkanejs.maven.plugins</groupId>
                 <artifactId>docker-compose-maven-plugin</artifactId>
@@ -100,7 +81,7 @@
                 <executions>
                     <execution>
                         <id>pull</id>
-                        <phase>initialize</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>pull</goal>
                         </goals>
@@ -111,7 +92,7 @@
                     </execution>                
                     <execution>
                         <id>up</id>
-                        <phase>initialize</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>up</goal>
                         </goals>
@@ -133,6 +114,19 @@
                     </execution>
                 </executions>
             </plugin>            
+            <plugin>
+                <groupId>com.github.ricardo-comar.spring-boot-camunda</groupId>
+                <artifactId>camunda-mock-service-maven-plugin</artifactId>
+                <version>1.1.0-SNAPSHOT</version>
+                <executions>    
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>camunda-mock-service</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+            </plugin>
 		</plugins>
 	</build>
 </project>
