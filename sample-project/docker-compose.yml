@@ -6,20 +6,6 @@ networks:
 
 services:
 
-  jenkins:
-    image: jenkins/jenkins:lts
-    privileged: true
-    user: root
-    network_mode: host
-    ports:
-      - 8081:8080
-      - 50000:50000
-    volumes:
-      - ./target/jenkins/home:/var/jenkins_home
-      - ./target/jenkins/local:/usr/local
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/local/bin/docker:/usr/local/bin/docker
-
   database:
     image: "postgres" # use latest official postgres version
     ports:
@@ -48,10 +34,5 @@ services:
       - DB_USERNAME=camunda
       - DB_PASSWORD=camunda
       - WAIT_FOR=database:5432
-#      - DB_DRIVER=com.mysql.jdbc.Driver
-#      - DB_URL=jdbc:mysql://mysql:3306/camunda_db?autoReconnect=true
-#      - DB_USERNAME=root
-#      - DB_PASSWORD=testpwd
-#      - WAIT_FOR=mysql:3306
     links:
       - database
